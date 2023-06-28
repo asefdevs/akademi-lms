@@ -1,0 +1,56 @@
+{% extends 'base.html' %}	
+{% load static %}
+{% block content %}
+
+	<div class="authincation d-flex flex-column flex-lg-row flex-column-fluid">
+		<div class="login-aside text-center  d-flex flex-column flex-row-auto">
+			<div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
+				<div class="text-center mb-lg-4 mb-2 pt-5 logo">
+					<img src="{% static 'images/logo-white.png' %}" alt="">
+				</div>
+				<h3 class="mb-2 text-white">Welcome back!</h3>
+			</div>
+			<div class="aside-image position-relative" style="background-image:url(images/background/pic-2.png);">
+				<img class="img1 move-1" src="{% static 'images/background/pic3.png' %}" alt="">
+				<img class="img2 move-2" src="{% static 'images/background/pic4.png' %}" alt="">
+				<img class="img3 move-3" src="{% static 'images/background/pic5.png' %}" alt="">
+				
+			</div>
+		</div>
+		<div class="container flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto">
+			<div class="d-flex justify-content-center h-100 align-items-center">
+				<div class="authincation-content style-2">
+					<div class="row no-gutters">
+						<div class="col-xl-12 tab-content">
+							<div id="sign-up" class="auth-form tab-pane fade show active  form-validation">
+								<form method='POST' >
+									<div class="text-center mb-4">
+										<h3 class="text-center mb-2 text-black">Sign up</h3>
+										<span>Your Social Campaigns</span>
+									</div>
+									{% csrf_token %}
+									{% for forms in form %}
+									
+									{{forms}}
+									<br>
+									{% if forms.errors %}
+									<div class="alert alert-danger">
+										{{ forms.errors }}
+								    </div>        
+								    {% endif %}                         
+									{% endfor %}
+									<button type="submit" class="btn btn-block btn-primary">Sign me up</button>
+								</form>
+								<div class="new-account mt-3 text-center">
+									<p class="font-w500">Already have an account? <a class="text-primary" href="page-login.html">Sign in</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+ 
