@@ -19,19 +19,29 @@ def register_page (request):
     return render(request, 'page-register.html',context)
 
 def login_page(request):
-    context={
-        'form': LoginForm(),
-    }
-    if request.method=='POST':
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        user=authenticate(username=username, password=password)
-        if user is not None:
-            login(request,user)
-            return redirect('home')
+    context = {'form': LoginForm()}
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user is not None :
+            user_type = user.user_type
+            
+            if user_type == 'student':
+                login(request, user)
+                return redirect('home')
+            elif user_type == 'teacher':
+                login(request, user)
+                return redirect('teacher_dashboard')
+            elif user_type == 'admin':
+                login(request, user)                
+                return redirect('admin_dashboard')
         else:
-            context['error']='username is not good'        
-    return render (request,'page-login.html',context)
+            context['error'] = 'Invalid credentials'
+    
+    return render(request, 'page-login.html', context)
     
 def logout_user(request):
     logout(request)

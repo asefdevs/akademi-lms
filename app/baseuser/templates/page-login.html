@@ -33,8 +33,6 @@
 									{% for fields in form %}
 									{{ fields }}
 									<br>
-									
-							      
 									{% endfor %}
 									
 									<div class="alert alert-danger">
@@ -42,6 +40,9 @@
 								    </div>  
 								
 									<button class="btn btn-block btn-primary">Sign In</button>
+									<div class="new-account mt-3 text-center">
+										<p class="font-w500">Dont  have an account? <a class="text-primary" href="{% url 'register' %}" data-toggle="tab">Register now</a></p>
+									</div>
 									
 								</form>
 								

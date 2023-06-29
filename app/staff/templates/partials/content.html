@@ -1,0 +1,115 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- row -->
+        <div class="row">
+            <div class="col-xl-3 col-lg-4">
+                <div class="clearfix">
+                    <div class="card card-bx profile-card author-profile m-b30">
+                        <div class="card-body">
+                            <div class="p-5">
+                                <div class="author-profile">
+                                    <div class="author-media">
+                                        <img src="{{ user.profile_photo.url }}" alt="">
+                                        <div class="upload-link" title="" data-toggle="tooltip" data-placement="right" data-original-title="update">
+                                            <input type="file" class="update-flie">
+                                            <i class="fa fa-camera"></i>
+                                        </div>
+                                    </div>
+                                    <div class="author-info">
+                                        <h6 class="title">{{user.first_name}}</h6>
+                                        <span>{{user.user_type}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-list">
+                                <ul>
+                                    <li><a href="uc-lightgallery.html">Gallery</a><span>3</span></li>
+                                    <li><a href="app-profile.html">Lessons</a><span>1</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-8">
+                <div class="card profile-card card-bx">
+                    <div class="card-header">
+                        <h6 class="title">Account setup</h6>
+                    </div>
+                    <form class="profile-form">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" value="{{user.first_name}}">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" class="form-control" value="{{user.last_name}}">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Role</label>
+                                    <input type="text" class="form-control" value="{{user.user_type}}">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Skills</label>
+                                    <input type="text" class="form-control" value="HTML,  JavaScript,  PHP">
+                                </div>	
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label d-block">Gender</label>
+                                    <select class="selectpicke w-100">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Birth</label>
+                                    <input type="text" class="form-control" placeholder="dd. mm .yyyy">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" value="+123456789">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Email address</label>
+                                    <input type="text" class="form-control" value="demo@gmail.com">
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label d-block">Country</label>
+                                    <select class="selectpicker w-100">
+                                        <option>Russia</option>
+                                        <option>Canada</option>
+                                        <option>China</option>
+                                        <option>India</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label d-block">City</label>
+                                    <select class="selectpicker w-100">
+                                        <option>Krasnodar</option>
+                                        <option>Tyumen</option>
+                                        <option>Chelyabinsk</option>
+                                        <option>Moscow</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary">UPDATE</button>
+                            <a href="page-register.html" class="btn-link float-end">Forgot your password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>	
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        
+        <!--**********************************
+            Footer end
+        ***********************************-->
+    </div>
+</div>
