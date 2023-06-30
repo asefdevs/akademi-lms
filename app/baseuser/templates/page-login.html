@@ -30,14 +30,16 @@
 										<span>Your Social Campaigns</span>
 									</div>
 									{% csrf_token %}
-									{% for fields in form %}
-									{{ fields }}
+									{% for field in form %}
+									{{ field }}
+									
 									<br>
 									{% endfor %}
 									
 									<div class="alert alert-danger">
 										{{ error }}
 								    </div>  
+									
 								
 									<button class="btn btn-block btn-primary">Sign In</button>
 									<div class="new-account mt-3 text-center">

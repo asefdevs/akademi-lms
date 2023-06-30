@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 
 from . forms import RegisterForm,LoginForm
+from. models import Student,Teacher
+from .decorators import unauthorized_user
 
 # Create your views here.
 
@@ -15,29 +17,22 @@ def register_page (request):
             user=form.save()
             user.set_password(user.password)
             user.save()
+            student=Student.objects.create(user=user)
+            student.save()
             return redirect('login')
+        
     return render(request, 'page-register.html',context)
 
+@unauthorized_user
 def login_page(request):
     context = {'form': LoginForm()}
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
-        
         if user is not None :
-            user_type = user.user_type
-            
-            if user_type == 'student':
-                login(request, user)
-                return redirect('home')
-            elif user_type == 'teacher':
-                login(request, user)
-                return redirect('teacher_dashboard')
-            elif user_type == 'admin':
-                login(request, user)                
-                return redirect('admin_dashboard')
+            login(request, user)
+            return redirect('home')
         else:
             context['error'] = 'Invalid credentials'
     

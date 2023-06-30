@@ -46,3 +46,12 @@ class User(AbstractUser):
     class Meta:
         verbose_name_plural=('Users')   
 
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    student_detail=models.CharField(max_length=400)
+
+class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    teacher_details=models.CharField(max_length=300)
+
+
