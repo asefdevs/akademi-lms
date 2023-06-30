@@ -10,5 +10,3 @@ def home(request):
         'user_details': User.objects.all(),
     }
     return render(request,'index.html',context)
-def example(request):
-    return render(request,'example.html')

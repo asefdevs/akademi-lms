@@ -41,12 +41,10 @@ def login_page(request):
             context['error'] = 'Invalid credentials'
     
     return render(request, 'page-login.html', context)
-    
+@unauthorized_user    
 def logout_user(request):
     logout(request)
     return redirect('login')
 
 
-def error_404(request):
-    return render(request,'page-error-404.html')
 
