@@ -50,11 +50,10 @@ class UserUpdateForm(UserChangeForm):
     password=None
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name','email','user_type', 'gender', 'birthday', 'grade', 'country', 'number')
+        fields = ('username', 'first_name', 'last_name','email','user_type', 'gender', 'birthdate', 'country', 'number')
         widgets = {
             'gender': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Gender'}),
-            'birthday': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Birth Date'}),
-            'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Grade'}),
+            'birthdate': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Birth Date'}),
             'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country'}),
             'number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Number'}),
             'username': forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}),

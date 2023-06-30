@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 
 from . forms import RegisterForm,LoginForm
-from. models import Student,Teacher
+from staff.models import Student,Teacher
 from .decorators import unauthorized_user
 
 # Create your views here.
@@ -17,8 +17,12 @@ def register_page (request):
             user=form.save()
             user.set_password(user.password)
             user.save()
-            student=Student.objects.create(user=user)
-            student.save()
+            if user.user_type == 'student':
+                 student=Student.objects.create(user=user)
+                 student.save()
+            elif user.user_type == 'teacher':
+                 teacher=Teacher.objects.create(user=user)
+                 teacher.save()
             return redirect('login')
         
     return render(request, 'page-register.html',context)

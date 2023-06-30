@@ -1,5 +1,5 @@
-# from django.contrib import admin
-# from staff.models import Student
+from django.contrib import admin
+from staff.models import Student,Teacher,Lesson
 
 
 # class Student_admin(admin.ModelAdmin):
@@ -15,3 +15,8 @@
 # admin.site.register(Student,Student_admin)
 
 # Register your models here.
+
+admin.site.register(Student)
+admin.site.register(Teacher)
+admin.site.register(Lesson)
+
