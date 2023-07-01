@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect,HttpResponse
 from baseuser.forms import UserUpdateForm
-from baseuser.decorators import student_required,teacher_required,unauthorized_user
+from baseuser.decorators import student_required,teacher_required,unauthorized_user,superadmin_required
+from staff.models import Lesson
 
-
+@superadmin_required
 def edit_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
@@ -24,7 +25,10 @@ def student_detail(request):
 
 @teacher_required
 def teacher_detail(request):
-     return HttpResponse('hello guys its teacher detail page')
+     context={
+          'lesson':Lesson.objects.all(),
+     }
+     return render(request,'teacher-detail.html',context)
 
 
 def error_404(request):

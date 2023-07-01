@@ -3,10 +3,10 @@ from django.contrib.auth import login,logout,authenticate
 
 from . forms import RegisterForm,LoginForm
 from staff.models import Student,Teacher
-from .decorators import unauthorized_user
+from .decorators import unauthorized_user,superadmin_required
 
 # Create your views here.
-
+# @superadmin_required
 def register_page (request):
     context={
         'form': RegisterForm(),
@@ -40,8 +40,9 @@ def login_page(request):
         else:
             context['error'] = 'Invalid credentials'
     
-    return render(request, 'page-login.html', context)
-@unauthorized_user    
+    return render(request, 'page-login.html', context) 
+
+
 def logout_user(request):
     logout(request)
     return redirect('login')

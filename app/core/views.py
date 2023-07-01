@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from baseuser.models import User
+from staff.models import Student
 
 
 # Create your views here.
@@ -10,3 +11,10 @@ def home(request):
         'user_details': User.objects.all(),
     }
     return render(request,'index.html',context)
+
+def student_list(request):
+    context={
+        'students': Student.objects.all(),
+
+    }
+    return render(request,'student.html',context)

@@ -27,7 +27,7 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
+    teacher_role=models.ForeignKey('Lesson',on_delete=models.CASCADE ,related_name='teacher_role',null=True)
     def __str__(self):
         return self.user.username
     class Meta:
@@ -36,7 +36,7 @@ class Teacher(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    # teacher = models.ManyToManyField(Teacher)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
