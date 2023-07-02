@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,HttpResponse
 from baseuser.forms import UserUpdateForm
 from baseuser.decorators import student_required,teacher_required,superadmin_required
-from staff.models import Lesson, Student
+from staff.models import Lesson, Student,Teacher
 from .forms import EditStudentForm
 
 
@@ -49,13 +49,20 @@ def student_edit(request):
 def student_detail(request):
         return HttpResponse('hello guys its student detail page')
 
-@teacher_required
-def teacher_detail(request):
+# @teacher_required
+def teacher_detail(request,teacher_id):
      context={
           'lesson':Lesson.objects.all(),
+          'page_title': 'Teacher Detail',
+          'teacher':Teacher.objects.get(user_id=teacher_id)
      }
      return render(request,'teacher-detail.html',context)
 
+def teacher_list(request):
+    context={
+        'teachers':Teacher.objects.all(),
+    }
+    return render(request,'teacher.html',context)
 
 def error_404(request):
     return render(request,'page-error-404.html')

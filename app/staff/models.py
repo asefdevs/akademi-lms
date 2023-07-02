@@ -1,5 +1,7 @@
 from django.db import models
 from baseuser.models import User
+from ckeditor.fields import RichTextField
+
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -17,6 +19,7 @@ class Student(models.Model):
         ('11', '11th Grade'),
     ]
     grade = models.CharField(max_length=232,choices=GRADE_CHOICES)
+    lessons = models.ManyToManyField('Lesson', related_name='students')
 
     def __str__(self):
         return self.user.username
@@ -27,7 +30,9 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    students = models.ManyToManyField('Student', related_name='students')
     teacher_role=models.ForeignKey('Lesson',on_delete=models.CASCADE ,related_name='teacher_role',null=True)
+    about_teacher=RichTextField(null=True)
     def __str__(self):
         return self.user.username
     class Meta:
@@ -36,7 +41,6 @@ class Teacher(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    # teacher = models.ManyToManyField(Teacher)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

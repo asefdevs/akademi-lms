@@ -9,7 +9,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 						<div class="dashboard_bar">
-							Dashboard
+							{{ page_title }}
 						</div>
                         </div>
                         <ul class="navbar-nav header-right">
@@ -25,10 +25,7 @@
 												  <a class="nav-link  menu-wallet" href="javascript:void(0);">
 															<svg id="Layer_1" enable-background="new 0 0 512 512" height="18" viewBox="0 0 512 512" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m174 240h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z"/><path d="m446 240h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z"/><path d="m392 512c-66.168 0-120-53.832-120-120s53.832-120 120-120 120 53.832 120 120-53.832 120-120 120zm0-208c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88z"/><path d="m174 512h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z"/></g></svg>
 												  </a>
-												</li>
-												
-												
-																
+												</li>																												
 											</ul>
 										</div>
 									</div>
@@ -133,7 +130,7 @@
 											</div>
 											<div class="card-body p-3">
 												{% if user.user_type == 'teacher' %}
-												<a href="{% url 'teacher_detail' %}" class="dropdown-item ai-icon ">
+												<a href="" class="dropdown-item ai-icon ">
 													<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="svg-main-icon">
 														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 															<polygon points="0 0 24 0 24 24 0 24"/>

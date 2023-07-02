@@ -9,6 +9,7 @@ class RegisterForm(forms.ModelForm):
         label='Confirm Password',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'})
     )
+    
     class Meta:
         model = User
         fields=('username', 'first_name', 'last_name','email', 'password','password2','user_type',)
