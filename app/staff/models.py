@@ -16,7 +16,7 @@ class Student(models.Model):
         ('10', '10th Grade'),
         ('11', '11th Grade'),
     ]
-    grade = models.CharField(max_length=2, choices=GRADE_CHOICES)
+    grade = models.CharField(max_length=232,choices=GRADE_CHOICES)
 
     def __str__(self):
         return self.user.username

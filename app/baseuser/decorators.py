@@ -28,12 +28,8 @@ def teacher_required(view_func):
 def superadmin_required(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.user_type == 'admin':
-            print('it works as admin')
-
             return view_func(request, *args, **kwargs)
         else:
-            print('it dont works as admin')
-
             return redirect('error_permission')
     return wrapper_func
 

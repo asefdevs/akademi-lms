@@ -88,11 +88,9 @@
 											<option value="2">Recent</option>
 										</select>
 										<!-- Button trigger modal -->
-										{% if user.user_type == 'admin' %}
 										<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
 										 + New Student
 										</button>
-										{% endif %}
 									</div>
 								</div>
 							</div>
@@ -214,50 +212,15 @@
 	***********************************-->
 	
 
-			<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			  <div class="modal-dialog modal-dialog-center">
-				<div class="modal-content">
-				  <div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">New Student Deatils</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				  </div>
-				  <div class="modal-body">
-					<div class="row">
-						<div class="col-xl-6">
-							<div class="mb-3">
-							  <label for="exampleFormControlInput1" class="form-label">First Name</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Yatin">
-							</div>
-							<div class="mb-3">
-							  <label for="exampleFormControlInput3" class="form-label">Current Class</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="VII A">
-							</div>
-						</div>
-						<div class="col-xl-6">
-							<div class="mb-3">
-							  <label for="exampleFormControlInput2" class="form-label">Last Name</label>
-							  <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="xarma">
-							</div>
-							 <label  class="form-label d-block">Gender</label>
-							 <select class="default-select" aria-label="Default select example">
-							  <option selected>Select</option>
-							  <option value="1">Male</option>
-							  <option value="2">Female</option>
-							  <option value="3">Other</option>
-							</select>
-						</div>
-					</div>
-				  </div>
-				  <div class="modal-footer">
-					<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				  </div>
-				</div>
-			  </div>
-			</div>
-
-	<!--**********************************
-		Modal
-	***********************************-->
+			
     {% endblock %}
+
+
+
+	{% comment %} <label for="id_user" class="form-label">Choose User</label>
+								<select class="form-select" id="id_user" name="user">
+								  <option value="">Select a User</option>
+								  {% for student in students %}
+								  <option value="{{ student.user.id }}">{{ student.user.username }}</option>
+								  {% endfor %}
+								</select> {% endcomment %}
