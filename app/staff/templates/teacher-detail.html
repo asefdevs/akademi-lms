@@ -100,7 +100,7 @@
 								<div class="d-flex justify-content-between">
 									<div class="user">
 										<div class="user-media">
-											<img src="images/avatar/8.jpg" alt="" class="avatar avatar-xxl">
+											<img src="{{ teacher.user.profile_photo.url}}" alt="" class="avatar avatar-xxl">
 										</div>
 										<div>
 											<h2 class="mb-0">{{teacher.user.first_name  }}  {{teacher.user.last_name}}</h2>
@@ -125,7 +125,7 @@
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/svg/location.svg" alt="">
+													<img src="{%static 'images/svg/location.svg' %}" alt="">
 												</a>	
 
 											</li>
@@ -136,7 +136,7 @@
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/svg/phone.svg" alt="">
+													<img src="{%static 'images/svg/phone.svg' %}" alt="">
 												</a>	
 											</li>
 											<li><span>Phone:</span><h5 class="mb-0">{{teacher.user.number}}</h5></li>
@@ -146,7 +146,7 @@
 										<ul class="student-details">
 											<li class="me-2">
 												<a class="icon-box bg-secondary">
-													<img src="images/svg/email.svg" alt="">
+													<img src="{%static 'images/svg/email.svg' %}" alt="">
 												</a>	
 											
 											</li>
@@ -162,7 +162,7 @@
 								<div class="card-body">
 									<div class="teacher-deatails">
 									<h3 class="heading">About</h3>
-									<p>{{teacher.user.about}} </p>
+									<p>{{teacher.about_teacher}} </p>
 									
 								</div>
 								</div>
@@ -201,7 +201,7 @@
 												</ul>
 											</div>
 											<div>
-												<img src="images/avatar/1.jpg" class="avatar avatar-lg" alt="">
+												<img src="{%static 'images/avatar/1.jpg' %}" class="avatar avatar-lg" alt="">
 											</div>
 										</div>
 										
@@ -231,7 +231,7 @@
 												</ul>
 											</div>
 											<div>
-												<img src="images/avatar/2.jpg" class="avatar avatar-lg" alt="">
+												<img src="{%static 'images/avatar/2.jpg' %}" class="avatar avatar-lg" alt="">
 											</div>
 										</div>
 									</div>
@@ -259,7 +259,7 @@
 												</ul>
 											</div>
 											<div>
-												<img src="images/avatar/3.jpg" class="avatar avatar-lg" alt="">
+												<img src="{%static 'images/avatar/3.jpg' %}" class="avatar avatar-lg" alt="">
 											</div>
 											
 										</div>
@@ -288,7 +288,7 @@
 												</ul>
 											</div>
 											<div>
-												<img src="images/avatar/4.jpg" class="avatar avatar-lg" alt="">
+												<img src="{%static 'images/avatar/4.jpg' %}" class="avatar avatar-lg" alt="">
 											</div>
 										</div>
 									</div>

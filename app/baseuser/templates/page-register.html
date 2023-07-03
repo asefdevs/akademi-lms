@@ -29,9 +29,7 @@
 										<span>Your Social Campaigns</span>
 									</div>
 									{% csrf_token %}
-									{% for forms in form %}
 									
-									{{forms}}
 									<br>
 									{% if forms.errors %}
 									<div class="alert alert-danger">

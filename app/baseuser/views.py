@@ -7,25 +7,47 @@ from .decorators import unauthorized_user,superadmin_required
 
 # Create your views here.
 # @superadmin_required
-def register_page (request):
+def register_teacher (request):
     context={
         'form': RegisterForm(),
+        'page_title': 'Teacher Registration',
     }
     if request.method=='POST':
-        form=RegisterForm(request.POST)
+        form=RegisterForm(request.POST,request.FILES)
+        if form.is_valid():
+            user=form.save()
+            user.set_password(user.password)
+            user.save()
+            if user.user_type == 'teacher': 
+                teacher_role=form.cleaned_data['teacher_role']
+                about_teacher=form.cleaned_data['about_teacher']
+                teacher=Teacher.objects.create(user=user)
+                teacher.teacher_role=teacher_role
+                teacher.about_teacher=about_teacher
+                teacher.save()
+                return redirect('home')
+        
+    return render(request, 'add-teacher.html',context)
+def register_student(request):
+    context={
+        'form': RegisterForm(),
+        'page_title':'Student Registration',
+    }
+    if request.method=='POST':
+        form=RegisterForm(request.POST,request.FILES)
         if form.is_valid():
             user=form.save()
             user.set_password(user.password)
             user.save()
             if user.user_type == 'student':
-                 student=Student.objects.create(user=user)
-                 student.save()
-            elif user.user_type == 'teacher':
-                 teacher=Teacher.objects.create(user=user)
-                 teacher.save()
-            return redirect('login')
-        
-    return render(request, 'page-register.html',context)
+                grade=form.cleaned_data['grade']
+                student=Student.objects.create(user=user)
+                student.grade=grade
+                student.save()
+                return redirect('home')
+    return render(request, 'add-student.html',context)
+
+
 
 @unauthorized_user
 def login_page(request):
