@@ -3,10 +3,11 @@ from django.contrib.auth import login,logout,authenticate
 
 from . forms import RegisterForm,LoginForm
 from staff.models import Student,Teacher
-from .decorators import unauthorized_user,superadmin_required
+from .decorators import unauthorized_user,superadmin_required,custom_login_required
 
 # Create your views here.
-# @superadmin_required
+@custom_login_required
+@superadmin_required
 def register_teacher (request):
     context={
         'form': RegisterForm(),
@@ -25,9 +26,12 @@ def register_teacher (request):
                 teacher.teacher_role=teacher_role
                 teacher.about_teacher=about_teacher
                 teacher.save()
-                return redirect('home')
+                return redirect('teachers')
         
     return render(request, 'add-teacher.html',context)
+
+@custom_login_required
+@superadmin_required
 def register_student(request):
     context={
         'form': RegisterForm(),
@@ -44,7 +48,7 @@ def register_student(request):
                 student=Student.objects.create(user=user)
                 student.grade=grade
                 student.save()
-                return redirect('home')
+                return redirect('students')
     return render(request, 'add-student.html',context)
 
 
