@@ -110,7 +110,12 @@
 						<span>
                               {{ teacher.user.last_login}}
 						</span>
-                        <p class="text-primary font-w600">{{ teacher.teacher_role }} Teacher</p>
+						
+                        <p class="text-primary font-w600">
+							{% for lesson in teacher.teacher_of_lesson.all %}
+								{{ lesson.title }}
+							{% endfor %}
+						</p>
                     </div>
                 </div>
                 <!-- Dropdown menu -->

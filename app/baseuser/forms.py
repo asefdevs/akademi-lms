@@ -17,12 +17,12 @@ class RegisterForm(forms.ModelForm):
         required=False,
     )
 
-    teacher_role = forms.ModelChoiceField(
-        label='Teacher Role',
-        queryset=Lesson.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Teacher Role'}),
-        required=False,
-    )
+    # teacher_role = forms.ModelChoiceField(
+    #     label='Teacher Role',
+    #     queryset=Lesson.objects.all(),
+    #     widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Teacher Role'}),
+    #     required=False,
+    # )
 
     about_teacher = forms.CharField(
         label='About Teacher',

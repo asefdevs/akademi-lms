@@ -54,7 +54,8 @@ def student_detail(request,student_id):
         context={
             'page_title': 'Student Detail',
             'student':Student.objects.get(user_id=student_id),
-            'lesson':Lesson.objects.all(),
+            'lessons':Lesson.objects.all(),
+            'teachers':Teacher.objects.all(),
         
         }
         return render(request, 'student-detail.html', context)

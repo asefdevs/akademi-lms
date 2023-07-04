@@ -20,10 +20,8 @@ def register_teacher (request):
             user.set_password(user.password)
             user.save()
             if user.user_type == 'teacher': 
-                teacher_role=form.cleaned_data['teacher_role']
                 about_teacher=form.cleaned_data['about_teacher']
                 teacher=Teacher.objects.create(user=user)
-                teacher.teacher_role=teacher_role
                 teacher.about_teacher=about_teacher
                 teacher.save()
                 return redirect('teachers')
