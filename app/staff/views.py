@@ -50,8 +50,14 @@ def student_edit(request):
 
 @custom_login_required
 @student_required
-def student_detail(request):
-        return HttpResponse('hello guys its student detail page')
+def student_detail(request,student_id):
+        context={
+            'page_title': 'Student Detail',
+            'student':Student.objects.get(user_id=student_id),
+            'lesson':Lesson.objects.all(),
+        
+        }
+        return render(request, 'student-detail.html', context)
 
 
 @custom_login_required
@@ -61,6 +67,7 @@ def teacher_detail(request,teacher_id):
           'lesson':Lesson.objects.all(),
           'page_title': 'Teacher Detail',
           'teacher':Teacher.objects.get(user_id=teacher_id)
+
      }
      return render(request,'teacher-detail.html',context)
 

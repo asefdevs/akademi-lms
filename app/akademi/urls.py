@@ -24,7 +24,7 @@ from core.urls import urlpatterns as core_url
 from staff.urls import urlpatterns as staff_url
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/',include(account_url)),
+    path('',include(account_url)),
     path('',include(core_url)),
     path('',include(staff_url)),
 

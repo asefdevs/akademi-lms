@@ -51,7 +51,14 @@ def register_student(request):
                 return redirect('students')
     return render(request, 'add-student.html',context)
 
-
+def register_staff(request):
+    context={
+        'form': RegisterForm(),
+    }
+    if request.method == 'POST':
+        form=RegisterForm(request.POST,request.FILES)
+        if form.is_valid():
+            user=form.save()
 
 @unauthorized_user
 def login_page(request):

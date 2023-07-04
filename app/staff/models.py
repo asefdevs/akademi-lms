@@ -47,3 +47,4 @@ class Lesson(models.Model):
         return self.title
     class Meta:
         verbose_name_plural = 'Lessons' 
+
