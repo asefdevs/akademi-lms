@@ -67,7 +67,7 @@
 															</svg>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+															<a class="dropdown-item btn-delete" data-id="{{ teacher.user_id }}">Delete</a>
                                                             <a class="dropdown-item" href="{% url 'teacher_edit' teacher.user_id %}">Edit</a>
                                                         </div>
                                                     </div>
@@ -81,9 +81,8 @@
 													</span>
 												
                                                 </div>
-												<div class="d-flex align-items-center">
-													<a href="{% url 'teacher_detail' teacher.user_id %}" class="btn  btn-primary btn-sm w-50 me-2"><i class="fa-solid fa-user me-2"></i>Profile</a>
-													<a href="chat.html" class="btn  btn-light btn-sm w-50"><i class="fa-sharp fa-regular fa-envelope me-2"></i>Chat</a>
+												<div class="d-flex align-items-center justify-content-center">
+													<a href="{% url 'teacher_detail' teacher.user_id %}" class="btn  btn-primary btn-sm w-50 me-2 "><i class="fa-solid fa-user me-2"></i>Profile</a>
 												</div>
                                             </div>
                                         </div>
@@ -92,118 +91,52 @@
                                     <!--/column-->
 								</div>	
 							<!--/column-->
-							</div>
-                           
-                        	<!--/Row -->
-						</div>
-					
-						{% comment %} <div class="table-pagenation teach">
-							<small>Showing <span>1-5</span>from <span>100</span>data</small>
-							<nav>
-								<ul class="pagination pagination-gutter pagination-primary no-bg">
-									<li class="page-item page-indicator">
-										<a class="page-link" href="javascript:void(0)">
-										<i class="fa-solid fa-chevron-left"></i></a>
-									</li>
-									<li class="page-item "><a class="page-link" href="javascript:void(0)">1</a>
-									</li>
-									<li class="page-item active"><a class="page-link" href="javascript:void(0)">2</a></li>
-									<li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
-									<li class="page-item page-indicator">
-										<a class="page-link" href="javascript:void(0)">
-										<i class="fa-solid fa-chevron-right"></i></a>
-									</li>
-								</ul>
-							</nav>
-						</div> {% endcomment %}
+							</div>	
+						</div>						
 					</div>
 				</div>
 			</div>
 		</div>
-		
-        <!--**********************************
-            Content body end
-        ***********************************-->
-
-		
-
-
 	</div>
+	<script>
+		// Delete button click event handler
+		document.querySelectorAll('.btn-delete').forEach(function(button) {
+			button.addEventListener('click', function() {
+				var teacherId = button.dataset.id;
+				
+				// Display a confirmation dialog
+				if (confirm('Are you sure you want to delete this teacher?')) {
+					// Send an AJAX request to delete the teacher
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', '/delete-teacher/');
+					xhr.setRequestHeader('Content-Type', 'application/json');
+					xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+					xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+					xhr.onload = function() {
+						if (xhr.status === 200) {
+							var response = JSON.parse(xhr.responseText);
+							if (response.success) {
+								// Successful deletion, remove the card from the view
+								button.closest('.card').remove();
+							} else {
+								alert(response.error);
+							}
+						} else {
+							alert('An error occurred while deleting the teacher.');
+						}
+					};
+	
+					var data = JSON.stringify({ teacher_id: teacherId });
+					xhr.send(data);
+				}
+			});
+		});
+	</script>
 
 
-	<!--**********************************
-		Modal
-	***********************************-->
-	<!-- Button trigger modal -->
+	
 		
 
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-center">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<h1 class="modal-title fs-5" id="exampleModalLabel">Teacher Details</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			  </div>
-			  <div class="modal-body">
-				<div class="row">
-					<div class="col-xl-6">
-						<div class="mb-3">
-						  <label for="exampleFormControlInput1" class="form-label">First Name</label>
-						  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Dimitres">
-						</div>
-						<div class="mb-3">
-						  <label for="exampleFormControlInput3" class="form-label">Email address</label>
-						  <input type="email" class="form-control" id="exampleFormControlInput3" placeholder="hello@example.com">
-						</div>
-						<div class="mb-3">
-						  <label  class="form-label">Subject</label>
-							<select class="default-select" aria-label="Default select example">
-								  <option selected>Select</option>
-								  <option value="1">Mathematics</option>
-								  <option value="2">Science</option>
-								  <option value="3">Art</option>
-								  <option value="4">History</option>
-								  <option value="5">Physics</option>
-								  <option value="6">Algorithm</option>
-								  <option value="7">Engilsh</option>
-								  <option value="8">Physics</option>
-								</select>
-						</div>
-					</div>
-					<div class="col-xl-6">
-						<div class="mb-3">
-						  <label for="exampleFormControlInput5" class="form-label">Last Name</label>
-						  <input type="text" class="form-control" id="exampleFormControlInput5" placeholder=" Viga">
-						</div>
-						<div class="mb-3">
-						  <label for="exampleFormControlInput6" class="form-label">Contact Number</label>
-						  <input type="number" class="form-control" id="exampleFormControlInput6" placeholder="+12345678">
-						</div>
-						<div class="mb-3">
-						  <label  class="form-label">Gender</label>
-							<select class="default-select" aria-label="Default select example">
-								  <option selected>Select</option>
-								  <option value="1">Male</option>
-								  <option value="2">Female</option>
-								  <option value="3">Other</option>
-								</select>
-						</div>
-						
-					</div>
-					
-				</div>
-			  </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			  </div>
-			</div>
-		  </div>
-		</div>
-
-	<!--**********************************
-		Modal
-	***********************************-->
+	
 
     {% endblock %}

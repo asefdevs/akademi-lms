@@ -1,8 +1,12 @@
-from django.shortcuts import render, redirect,HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lesson, Student,Teacher
 from .forms import EditStudentForm,EditUserForm,EditTeacherForm
+from django.http import JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 
@@ -47,6 +51,23 @@ def student_detail(request,student_id):
         
         }
         return render(request, 'student-detail.html', context)
+
+
+@custom_login_required
+@superadmin_required
+def delete_student(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        student_id = data.get('student_id')
+        try:
+            student = User.objects.get(id=student_id)
+            student.delete()
+            return JsonResponse({'success': True, 'message': 'Student deleted successfully.'})
+        except Student.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Student not found.'})
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})
+
+
 
 
 @custom_login_required
@@ -95,6 +116,19 @@ def teacher_edit(request,teacher_id):
     }
     return render(request, 'teacher_edit.html', context)        
 
+@custom_login_required
+@superadmin_required
+def delete_teacher(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        teacher_id = data.get('teacher_id')
+        try:
+            teacher = User.objects.get(id=teacher_id)
+            teacher.delete()
+            return JsonResponse({'success': True, 'message': 'teacher deleted successfully.'})
+        except teacher.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'teacher not found.'})
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})
 
 
 def error_404(request):
