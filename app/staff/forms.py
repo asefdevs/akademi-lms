@@ -1,8 +1,10 @@
-from staff.models import Student
+from staff.models import Student,Teacher
 from baseuser.models import User
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.forms.widgets import ClearableFileInput
+from ckeditor.widgets import CKEditorWidget
+
 
 
 class EditUserForm(UserChangeForm):
@@ -33,13 +35,21 @@ class EditUserForm(UserChangeForm):
         }
 
 class EditStudentForm(forms.ModelForm):
-    password=None
     class Meta:
         model = Student
         fields = ('grade',)
         widgets = {
             'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Grade'}),
         }
+
+class EditTeacherForm(forms.ModelForm):
+    class Meta:
+        model=Teacher
+        fields=('about_teacher', )
+        widgets={
+            'about_teacher': CKEditorWidget(),
+        }
+
         
 
 

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect,HttpResponse
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lesson, Student,Teacher
-from .forms import EditStudentForm,EditUserForm
+from .forms import EditStudentForm,EditUserForm,EditTeacherForm
 
 
 
@@ -20,7 +20,6 @@ def student_list(request):
 def student_edit(request,student_id):
     student = Student.objects.get(user_id=student_id) 
     user=User.objects.get(id=student_id) 
-    print(student.user.first_name)
     if request.method == 'POST':  
         form_user = EditUserForm(request.POST,request.FILES, instance=user)
         form_student=EditStudentForm(request.POST, instance=student)
@@ -69,6 +68,37 @@ def teacher_list(request):
     }
     return render(request,'teacher.html',context)
 
+
+@custom_login_required
+@superadmin_required
+def teacher_edit(request,teacher_id):
+    teacher=Teacher.objects.get(user_id=teacher_id) 
+    user=User.objects.get(id=teacher_id) 
+    if request.method == 'POST':
+         form_user=EditUserForm(request.POST,request.FILES,instance=user)
+         form_teacher=EditTeacherForm(request.POST,instance=teacher)
+         if form_user.is_valid() and form_teacher.is_valid():
+              form_user.save()
+              form_teacher.save()
+              if 'profile_photo' in request.FILES:
+                   user.profile_photo = request.FILES['profile_photo']
+                   user.save()
+              return redirect('teachers')
+    else:
+        form_user = EditUserForm(instance=user)
+        form_teacher=EditTeacherForm(instance=teacher)
+    
+    context={
+         'form_user': form_user,
+         'form_teacher': form_teacher,
+         'teacher':teacher
+    }
+    return render(request, 'teacher_edit.html', context)        
+
+
+
 def error_404(request):
     return render(request,'page-error-404.html')
+
+
 

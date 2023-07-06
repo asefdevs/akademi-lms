@@ -6,7 +6,12 @@
 		{% include 'partials/header.html' %}
 		
 		{% include 'partials/sidebar.html' %}
-		<!--**********************************
+        <head>
+            <!-- ... -->
+            {{ form_teacher.media }}
+            <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+        </head>		
+        <!--**********************************
             Content body start
 			***********************************-->
 			<div class="content-body">
@@ -95,8 +100,8 @@
 											{{form_user.number}}
 										</div>
 										<div class="col-sm-6 m-b30">
-											<label class="form-label">Grade</label>
-											{{form_student.grade}}
+											<label class="form-label">About Teacher</label>
+											{{form_teacher.about_teacher}}
 										</div>
 									</div>
 								</div>
