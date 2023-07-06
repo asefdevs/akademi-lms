@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-
 from . forms import RegisterForm,LoginForm
 from staff.models import Student,Teacher
 from .decorators import unauthorized_user,superadmin_required,custom_login_required

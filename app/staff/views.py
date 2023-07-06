@@ -1,30 +1,14 @@
 from django.shortcuts import render, redirect,HttpResponse
-from baseuser.forms import UserUpdateForm
+from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lesson, Student,Teacher
-from .forms import EditStudentForm
+from .forms import EditStudentForm,EditUserForm
 
-@custom_login_required
-@superadmin_required
-def edit_profile(request):
-    if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('edit_profile')
-    else:
-        form = UserUpdateForm(instance=request.user)
 
-    context = {
-        'form': form,
-    }
-
-    return render(request, 'edit-profile.html', context)
 
 @custom_login_required
 @superadmin_required
 def student_list(request):
-    form = EditStudentForm()
     context = {
         'students': Student.objects.all(),
     }
@@ -33,19 +17,24 @@ def student_list(request):
 
 @custom_login_required
 @superadmin_required
-def student_edit(request):
-    students = Student.objects.all()
-    if request.method == 'POST':
-        student_id = request.POST.get('student_id')  
-
-        student = Student.objects.get(user_id=student_id)  
-        form = EditStudentForm(request.POST, instance=student)
-        if form.is_valid():
-            form.save()
+def student_edit(request,student_id):
+    student = Student.objects.get(user_id=student_id) 
+    user=User.objects.get(id=student_id) 
+    print(student.user.first_name)
+    if request.method == 'POST':  
+        form_user = EditUserForm(request.POST,request.FILES, instance=user)
+        form_student=EditStudentForm(request.POST, instance=student)
+        if form_user.is_valid() and form_student.is_valid():
+            form_user.save()
+            form_student.save()
+            if 'profile_photo' in request.FILES:
+                 user.profile_photo = request.FILES['profile_photo']
+                 user.save()
             return redirect('students')  
     else:
-        form = EditStudentForm()
-    return render(request, 'student-edit.html', {'students': students, 'form': form})
+        form_user = EditUserForm(instance=user)
+        form_student=EditStudentForm(instance=student)
+    return render(request, 'edit-student.html', {'form_user': form_user,'form_student':form_student ,'student': student})
 
 
 @custom_login_required
