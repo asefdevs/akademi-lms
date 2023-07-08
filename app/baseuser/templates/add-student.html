@@ -130,9 +130,7 @@
 												  <label for="exampleFormControlInput4" class="form-label text-primary">Gender<span class="required">*</span></label>
 												  {{form.gender}}
 												</div>
-												<div class="mb-3">
-												  <label for="exampleFormControlInput5" class="form-label text-primary">User Type<span class="required">*</span></label>
-												  
+												<div class="mb-3">												  
 												  {{form.user_type}}
 												</div>
 												<div class="mb-3">
@@ -150,7 +148,14 @@
 											  <div class="mb-3">
 												<label for="exampleFormControlInput10" class="form-label">Password Confirm<span >*</span></label>
 											   {{form.password2}}
-										  </div>		
+										  </div>	
+										  <div>
+											{% if messages %}
+											{% for message in messages  %}
+											<p class='text-danger'>{{message}}</p>
+											{% endfor %}
+											{% endif %}
+										</div>	
 										  <button type="submit" class="btn btn-block btn-primary">Sign me up</button>
 			
 											</div>

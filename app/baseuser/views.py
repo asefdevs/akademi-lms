@@ -10,7 +10,7 @@ from django.contrib import messages
 @superadmin_required
 def register_teacher (request):
     context={
-        'form': RegisterForm(),
+        'form': RegisterForm(initial={'user_type': 'teacher'}),
         'page_title': 'Teacher Registration',
     }
     if request.method=='POST':
@@ -35,7 +35,7 @@ def register_teacher (request):
 @superadmin_required
 def register_student(request):
     context={
-        'form': RegisterForm(),
+        'form': RegisterForm(initial={'user_type': 'student'}),
         'page_title':'Student Registration',
     }
     if request.method=='POST':
@@ -60,7 +60,7 @@ def register_student(request):
 @superadmin_required
 def register_staff(request):
     context={
-        'form': RegisterForm(),
+        'form': RegisterForm(initial={'user_type': 'admin'}),
         'page_title': 'Register Staff',
     }
     if request.method == 'POST':
@@ -73,7 +73,7 @@ def register_staff(request):
                 position=form.cleaned_data['position_staff'] 
                 staff=Staff.objects.create(user=user)
                 staff.position=position
-                staff.save()
+                staff.save()    
                 return redirect('staff')
         else:
             form=RegisterForm(request.POST,request.FILES)
