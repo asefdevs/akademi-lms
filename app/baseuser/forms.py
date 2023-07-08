@@ -1,6 +1,6 @@
 from . models import User
 from django import forms
-from staff.models import Student
+from staff.models import Student,Staff
 
 
 
@@ -21,6 +21,12 @@ class RegisterForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'About Teacher'}),
         required=False,
     )
+    position_staff=forms.ChoiceField(
+        label='Position',
+        choices=Staff.position_choices ,
+        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Position'}),
+        required=False
+        )
     
     class Meta:
         model = User

@@ -1,0 +1,134 @@
+{% extends 'base_staff.html' %}
+{% load static %}
+{% block content %}
+
+    {% include 'partials/navheader-preloader.html' %}
+    {% include 'partials/header.html' %}
+
+    {% include 'partials/sidebar.html' %}
+    <!--**********************************
+        Content body start
+    ***********************************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <!-- row -->
+            <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                    <div class="clearfix">
+                        <div class="card card-bx profile-card author-profile m-b30">
+                            <div class="card-body">
+                                <form class="profile-form" method='POST' enctype="multipart/form-data">
+                                    <div class="p-5">
+                                        <div class="author-profile">
+                                           
+                                            <div class="author-media">
+                                                <img src="{{ user.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+                                            </div>
+                                            <div class="author-info">
+                                                <h6 class="title">{{ user.first_name }}</h6>
+                                                <span>{{user.user_type|capfirst}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% comment %} <div class="info-list">
+                                        <ul>
+                                            {% if request.user.user_type == 'admin' %}
+                                            <li><a href="">Position</a>
+                                                <span>
+                                                    {{ user.position|capfirst }}
+                                                </span>
+                                            </li>
+                                            <li><a href="">Lessons</a>
+                                                <span>
+                                                    {{ student.lessons.count }}
+                                                </span>
+                                            </li>
+                                            {% elif request.user.user_type == 'student' %}
+                                            <li><a href="">Grade</a>
+                                                <span>
+                                                    {{ user.grade|capfirst }}
+                                                </span>
+                                            </li>
+                                            <li><a href="">Lessons</a>
+                                                <span>
+                                                    {{ user.lessons.count }}
+                                                </span>
+                                            </li>
+                                            {% else %}
+                                            <li><a href="">Position</a>
+                                                <span>
+                                                    {{ user.teacher_of_lesson|capfirst }}
+                                                </span>
+                                            </li>
+                                            <li><a href="">Lessons</a>
+                                                <span>
+                                                    {{ user.students.count }}
+                                                </span>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div> {% endcomment %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card profile-card card-bx">
+                        <div class="card-header">
+                            <h6 class="title">Profile Details</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" value="{{ user.first_name }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" class="form-control" value="{{ user.last_name }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Gender</label>
+                                    <input type="text" class="form-control" value="{{ user.gender }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Birth</label>
+                                    <input type="text" class="form-control" value="{{ user.birthdate }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" class="form-control" value="{{ user.country }}" disabled>
+                                </div>
+                                <div class="col-sm-6 m-b30">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" value="{{ user.number }}" disabled >
+                                </div>
+                                {% comment %} <div class="col-sm-6 m-b30">
+                                    {% if request.user.user_type == 'admin' %}
+                                    <label class="form-label">Position</label>
+                                    {% endif %}
+                                    <input type="text" class="form-control" value="{{ profile.position }}" disabled>
+                                </div> {% endcomment %}
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--**********************************
+        Content body end
+    ***********************************-->
+</div>
+
+{% endblock %}

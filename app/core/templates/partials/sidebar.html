@@ -8,7 +8,10 @@
 				<ul class="metismenu" id="menu">
 					{% if request.user.user_type == 'student' or request.user.user_type == 'teacher' or request.user.user_type == 'admin' %}
 							<li>
-							<a href="{% url 'home' %}">Dashboard</a>
+						<a href="{% url 'home' %}" class=" nav-text " href="javascript:void(0);" aria-expanded="false">
+							<i class="material-symbols-outlined">home</i>
+							<span class="nav-text">Dashboard</span>
+						</a>
 							</li>
 					{% endif %}
 					{% if request.user.user_type == 'admin' %}
@@ -38,8 +41,8 @@
 						<span class="nav-text">Staff</span>
 					</a>
 					<ul aria-expanded="false">
-						<li><a href="{% url 'teachers' %}">Staffs</a></li>
-						<li><a href="{% url 'register-teacher' %}">Add New Staff</a></li>
+						<li><a href="{% url 'staff' %}">Staffs</a></li>
+						<li><a href="{% url 'register-staff' %}">Add New Staff</a></li>
 					</ul>
 
 					</li>

@@ -1,20 +1,45 @@
 from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
-from staff.models import Lesson, Student,Teacher
+from staff.models import Lesson, Staff, Student,Teacher
 from .forms import EditStudentForm,EditUserForm,EditTeacherForm
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 
+def show_profile(request):
+    user=request.user
+    # user_id = request.user.id
+    # if user.user_type == 'admin':
+    #     staff= Staff.objects.get(user_id=user_id)
+    #     context={'profile':staff}
+    # elif user.user_type == 'student':
+    #     student=Student.objects.get(user_id=user_id)
+    #     context={'profile':student}
+    # elif user.user_type == 'teacher':
+    #     teacher=Teacher.objects.get(user_id=user_id)
+    #     context={'profile':teacher}
 
+ 
+    return render(request, 'show_profile.html',context={'user':user})
 
 
 @custom_login_required
 @superadmin_required
 def student_list(request):
+    search_query = request.GET.get('search_query')
+    filter_option = request.GET.get('filter_option')
+    students=Student.objects.all()
+    if search_query:
+        students=students.filter(user__first_name__icontains=search_query)
+    if filter_option == 'oldest':
+        students=students.order_by('-user__created_at')
+    elif filter_option == 'recent':
+        students=students.order_by('user__created_at')
     context = {
-        'students': Student.objects.all(),
+        'students': students,
+        'search_query': search_query ,
+        'filter_option' : filter_option
     }
     return render(request, 'student.html', context)
 
@@ -84,8 +109,19 @@ def teacher_detail(request,teacher_id):
 @custom_login_required
 @superadmin_required
 def teacher_list(request):
+    search_query=request.GET.get('search_query')
+    filter_option=request.GET.get('filter_option')
+    teachers=Teacher.objects.all()
+    if search_query:
+        teachers=teachers.filter(user__first_name__icontains=search_query)
+    if filter_option == 'oldest':
+        teachers=teachers.order_by('-user__created_at')
+    elif filter_option == 'recent':
+        teachers=teachers.order_by('user__created_at')
     context={
-        'teachers':Teacher.objects.all(),
+        'teachers':teachers,
+        'search_query':search_query,
+        'filter_option':filter_option
     }
     return render(request,'teacher.html',context)
 
@@ -130,6 +166,22 @@ def delete_teacher(request):
             return JsonResponse({'success': False, 'error': 'teacher not found.'})
     return JsonResponse({'success': False, 'error': 'Invalid request.'})
 
+def staff_list(request):
+    search_query=request.GET.get('search_query')
+    filter_option=request.GET.get('filter_option')
+    staff=Staff.objects.all()
+    if search_query:
+        staff=staff.filter(user__first_name__icontains=search_query)
+    if filter_option == 'oldest':
+        staff=staff.order_by('-user__created_at')
+    elif filter_option == 'recent':
+        staff=staff.order_by('user__created_at')
+    context={
+        'staff':staff,
+        'search_query':search_query,
+        'filter_option':filter_option
+    }
+    return render(request,'staff.html',context)
 
 def error_404(request):
     return render(request,'page-error-404.html')

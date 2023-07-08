@@ -4,7 +4,7 @@ from ckeditor.fields import RichTextField
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='student')
     GRADE_CHOICES = [
         ('1', '1st Grade'),
         ('2', '2nd Grade'),
@@ -29,7 +29,7 @@ class Student(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='teacher')
     students = models.ManyToManyField('Student', related_name='students')
     about_teacher=RichTextField(null=True)
     def __str__(self):
@@ -47,4 +47,19 @@ class Lesson(models.Model):
         return self.title
     class Meta:
         verbose_name_plural = 'Lessons' 
+
+class Staff(models.Model):
+    user=models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True,related_name='staff')
+    position_choices=[
+        ('director','Director'),
+        ('asistant-director','Asistant')       
+    ]
+    position=models.CharField(max_length=50,choices=position_choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
+    class Meta:
+        verbose_name_plural = 'Staff' 
 

@@ -8,161 +8,98 @@
 
     
 		
-		<!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xl-12">
-						<div class="card">
-							<div class="card-header">
-								<h5 class="mb-0">Personal Details</h5>
-							</div>
-							<div class="card-body">
-								<form method="POST" enctype="multipart/form-data">
-									{% csrf_token %}
-								<div class="row">
-									
-									<div class="col-xl-6 col-sm-6">
-										<div class="mb-3">
-											<label for="exampleFormControlInput1" class="form-label text-primary">Username<span >*</span></label>
-											{{form.username}}
-										  </div>
-										<div class="mb-3">
-										  <label for="exampleFormControlInput1" class="form-label text-primary">First Name<span >*</span></label>
-										  {{form.first_name}}
-										</div>
-										<div class="mb-3">
-											<label for="exampleFormControlInput1" class="form-label text-primary">Last Name<span >*</span></label>
-											{{form.last_name}}
-										  </div>
-										
-										<div class="mb-3">
-										  <label for="exampleFormControlInput3" class="form-label text-primary">Email<span >*</span></label>
-										  {{form.email}}
-										</div>
-										<div class="mb-3">
-										  <label for="exampleFormControlTextarea1" class="form-label text-primary">Address<span >*</span></label>
-										  {{form.country}}
-										</div>
-										<div class="mb-3">
-											  <label for="exampleFormControlInput10" class="form-label">Date of Birth<span >*</span></label>
-											 {{form.birthdate}}
-										</div>		
-										<div class="mb-3">
-											<label for="exampleFormControlInput10" class="form-label">Password<span >*</span></label>
-										   {{form.password}}
-									  </div>			
-									  <div class="mb-3">
-										<label for="exampleFormControlInput10" class="form-label">Password Confirm<span >*</span></label>
-									   {{form.password2}}
-								  </div>										
-										
-									</div>
-									<div class="col-xl-6 col-sm-6">
-										<div class="mb-3">
-										  <label for="exampleFormControlInput4" class="form-label text-primary">Gender<span >*</span></label>
-										  {{form.gender}}
-										</div>
-										<div class="mb-3">
-										  <label for="exampleFormControlInput6" class="form-label text-primary">Phone Number<span >*</span></label>
-										  {{form.number}}
-										</div>
-										 <div class="mb-3">
-										  <label  class="form-label text-primary">Photo<span >*</span></label>
-										  <div class="avatar-upload">
-											<div class="avatar-preview">
-												<div id="imagePreview" style="background-image: url('{%static "images/no-img-avatar.png" %}');"> 			
-												</div>
-											</div>
-											{{form.profile_photo}}
-											
-										</div> 
-										<div class="mb-3">
-										  <label for="exampleFormControlInput8" class="form-label text-primary">User type<span >*</span></label>
-										  {{form.user_type}}
-										</div>
-										<button type="submit" class="btn btn-block btn-primary">Sign me up</button>
-
-									</div>
-								</div>
-							</form>
-
-							</div>
-						</div>
-					</div>
-				</div>
+	<div class="content-body">
+		<div class="container-fluid">
+			<div class="row">
 				<div class="col-xl-12">
 					<div class="card">
 						<div class="card-header">
-							<h5 class="mb-0">Education</h5>
+							<h5 class="mb-0">Student Details</h5>
 						</div>
 						<div class="card-body">
+							<form method="POST" enctype="multipart/form-data">
+								{% csrf_token %}
 							<div class="row">
-								<div class="col-xl-6 col-sm-6">
-									<div class="mb-3">
-									  <label for="exampleFormControlInput9" class="form-label text-primary">University <span class="required">*</span></label>
-									  <input type="text" class="form-control" id="exampleFormControlInput9" placeholder="University of Oxford">
-									</div>
-									<div class="mb-3">
-									  <div class="mb-3">
-										  
-										  <label class="form-label text-primary">Start & End Date<span class="required">*</span></label>
-											<div class="d-flex">
-												<input type="text" class="form-control w-50" id="datepicker1">
-												<input type="text" class="form-control w-50 ms-3" id="datepicker2">
+								<div class="col-xl-3 col-lg-4">
+									<label class="form-label text-primary">Photo<span class="required">*</span></label>
+									<div class="avatar-upload">
+										<div class="avatar-preview">
+											<div id="imagePreview" style="background-image: url('{%static "images/no-img-avatar.png" %}');"> 			
 											</div>
+										</div>
+										{{form.profile_photo}}
+									</div>	
+								</div>
+								<div class="col-xl-9 col-lg-8">
+									
+									<div class="row">
+										<div class="col-xl-6 col-sm-6">
+											<div class="mb-3">
+												<label for="exampleFormControlInput1" class="form-label text-primary">Username<span class="required">*</span></label>
+												{{form.username}}
+											  </div>
+											<div class="mb-3">
+											  <label for="exampleFormControlInput1" class="form-label text-primary">First Name<span class="required">*</span></label>
+											  {{form.first_name}}
+											</div>
+											<div class="mb-3">
+												<label for="exampleFormControlInput1" class="form-label text-primary">Last Name<span class="required">*</span></label>
+												{{form.last_name}}
+											  </div>
+											<div class="mb-3">
+											  <label  class="form-label text-primary">Date of Birth<span class="required">*</span></label>
+												{{form.birthdate}}
+											</div>
+											<div class="mb-3">
+											  <label for="exampleFormControlInput3" class="form-label text-primary">Email<span class="required">*</span></label>
+											  {{form.email}}
+											</div>
+											<div class="mb-3">
+											  <label for="exampleFormControlTextarea1" class="form-label text-primary">Address<span class="required">*</span></label>
+											  {{form.country}}
+											</div>
+										</div>
+										<div class="col-xl-6 col-sm-6">
+											<div class="mb-3">
+											  <label for="exampleFormControlInput4" class="form-label text-primary">Gender<span class="required">*</span></label>
+											  {{form.gender}}
+											</div>
+											<div class="mb-3">
+											  <label for="exampleFormControlInput5" class="form-label text-primary">User Type<span class="required">*</span></label>
+											  {{form.user_type}}
+											</div>
+											<div class="mb-3">
+											  <label for="exampleFormControlInput6" class="form-label text-primary">Phone Number<span class="required">*</span></label>
+											  {{form.number}}
+											</div>
+											<div class="mb-3">
+												<label for="exampleFormControlInput6" class="form-label text-primary">Position<span class="required">*</span></label>
+												{{form.position_staff }}
+											  </div>
+											<div class="mb-3">
+												<label for="exampleFormControlInput10" class="form-label">Password<span >*</span></label>
+											   {{form.password}}
+										  </div>			
+										  <div class="mb-3">
+											<label for="exampleFormControlInput10" class="form-label">Password Confirm<span >*</span></label>
+										   {{form.password2}}
+									  </div>		
+									  <button type="submit" class="btn btn-block btn-primary">Sign me up</button>
+		
 										</div>
 									</div>
 								</div>
-								<div class="col-xl-6 col-sm-6">
-									<div class="mb-3">
-									  <label for="exampleFormControlInput14" class="form-label text-primary">Degree<span class="required">*</span></label>
-									  <input type="text" class="form-control" id="exampleFormControlInput14" placeholder="B.Tech">
-									</div>
-									
-									<div class="mb-3">
-									  <label for="exampleFormControlInput13" class="form-label text-primary">City<span class="required">*</span></label>
-									  <input type="number" class="form-control" id="exampleFormControlInput13" placeholder="USA">
-									</div>
-								</div>
-							</div>
-							<div class="float-end">
-								<button class="btn btn-outline-primary me-3">Save as Draft</button>
-								<button class="btn btn-primary" type="button">Save</button>
+							</form>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-        <!--**********************************
-            Content body end
-        ***********************************-->
-		
-		<div class="footer out-footer style-2">
-			<div class="copyright">
-				<p>Copyright © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">DexignLab</a> 2023</p>
-			</div>
-		</div> 
-
-      
-        <!--**********************************
-            Footer end
-        ***********************************-->
-
-		<!--**********************************
-           Support ticket button start
-        ***********************************-->
-		
-        <!--**********************************
-           Support ticket button end
-        ***********************************-->
-
-
 	</div>
+
+
+	
     <!--**********************************
         Main wrapper end
     ***********************************-->

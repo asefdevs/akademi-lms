@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth import login,logout,authenticate
 from . forms import RegisterForm,LoginForm
-from staff.models import Student,Teacher
+from staff.models import Staff, Student,Teacher
 from .decorators import unauthorized_user,superadmin_required,custom_login_required
 
 # Create your views here.
@@ -51,12 +51,22 @@ def register_student(request):
 def register_staff(request):
     context={
         'form': RegisterForm(),
+        'page_title': 'Register Staff',
     }
     if request.method == 'POST':
         form=RegisterForm(request.POST,request.FILES)
         if form.is_valid():
             user=form.save()
-
+            user.set_password(user.password)
+            user.save()
+            if user.user_type == 'admin':
+                position=form.cleaned_data['position_staff'] 
+                staff=Staff.objects.create(user=user)
+                staff.position=position
+                staff.save()
+                return HttpResponse('admin successfully')
+    return render(request, 'add-staff.html',context)
+   
 @unauthorized_user
 def login_page(request):
     context = {'form': LoginForm()}
