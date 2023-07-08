@@ -1,12 +1,13 @@
-from django.shortcuts import get_object_or_404, render, redirect,HttpResponse
+from django.shortcuts import  render, redirect
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lesson, Staff, Student,Teacher
 from .forms import EditStudentForm,EditUserForm,EditTeacherForm
 from django.http import JsonResponse
 import json
-from django.views.decorators.csrf import csrf_exempt
 
+
+@custom_login_required
 def show_profile(request):
     user=request.user
     # user_id = request.user.id
@@ -166,6 +167,8 @@ def delete_teacher(request):
             return JsonResponse({'success': False, 'error': 'teacher not found.'})
     return JsonResponse({'success': False, 'error': 'Invalid request.'})
 
+@custom_login_required
+@superadmin_required
 def staff_list(request):
     search_query=request.GET.get('search_query')
     filter_option=request.GET.get('filter_option')

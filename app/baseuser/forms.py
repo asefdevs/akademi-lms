@@ -1,6 +1,10 @@
 from . models import User
 from django import forms
 from staff.models import Student,Staff
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm,UsernameField 
+
+
 
 
 
@@ -65,8 +69,16 @@ class LoginForm(forms.ModelForm):
         fields=('username', 'password')
         widgets={
             'username': forms.TextInput(attrs={'class':'form-control','placeholder':'username'}),
-            'password': forms.TextInput(attrs={'class':'form-control','placeholder':'password'}),
+            'password': forms.PasswordInput(attrs={'class':'form-control','placeholder':'password'}),
         }
+
+# class LoginForm( AuthenticationForm ):
+#     username = UsernameField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'username',"autofocus": True}))
+#     password = forms.CharField(
+#         widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'password',"autocomplete": "current-password"}),
+#     )
+
+  
 
 
 

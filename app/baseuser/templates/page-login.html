@@ -8,8 +8,7 @@
 				<div class="text-center mb-lg-4 mb-2 pt-5 logo">
 					<img src="{% static 'images/logo-white.png' %}" alt="">
 				</div>
-				<h3 class="mb-2 text-white">Welcome back!</h3>
-				<p class="mb-4">User Experience & Interface Design <br>Strategy SaaS Solutions</p>
+		
 			</div>
 			<div class="aside-image position-relative" style="background-image:url('images/background/pic-2.png);">
 				<img class="img1 move-1" src="{% static 'images/background/pic3.png' %}" alt="">
@@ -23,25 +22,31 @@
 				<div class="authincation-content style-2">
 					<div class="row no-gutters">
 						<div class="col-xl-12 tab-content">
+							
 							<div id="sign-up" class="auth-form tab-pane fade show active  form-validation">
 								<form method='POST'>
 									<div class="text-center mb-4">
 										<h3 class="text-center mb-2 text-black">Sign In</h3>
-										<span>Your Social Campaigns</span>
 									</div>
 									{% csrf_token %}
-									{% for field in form %}
-									{{ field }}
-									
-									<br>
-									{% endfor %}
-									
-									<div class="alert alert-danger">
-										{{ error }}
-								    </div>  
-									
-								
-									<button class="btn btn-block btn-primary">Sign In</button>
+									<div class="mb-3">
+										<label for="exampleFormControlInput1" class="form-label text-primary">Username<span class="required">*</span></label>
+										{{form.username}}
+									  </div>
+									<div class="mb-3">
+										<label for="exampleFormControlInput1" class="form-label text-primary">Password<span class="required">*</span></label>
+										{{form.password}}
+									  </div>
+									  <div>
+										{% if messages %}
+										{% for message in messages  %}
+										<p class='text-danger'>{{message}}</p>
+										{% endfor %}
+										{% endif %}
+									</div>
+
+
+									<button type='submit' class="btn btn-block btn-primary">Sign In</button>
 								
 									
 								</form>

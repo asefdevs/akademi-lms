@@ -3,6 +3,7 @@ from django.contrib.auth import login,logout,authenticate
 from . forms import RegisterForm,LoginForm
 from staff.models import Staff, Student,Teacher
 from .decorators import unauthorized_user,superadmin_required,custom_login_required
+from django.contrib import messages
 
 # Create your views here.
 @custom_login_required
@@ -24,7 +25,10 @@ def register_teacher (request):
                 teacher.about_teacher=about_teacher
                 teacher.save()
                 return redirect('teachers')
-        
+        else:
+            form=RegisterForm(request.POST,request.FILES)
+            messages.error(request,"Invalid credintials in form")
+
     return render(request, 'add-teacher.html',context)
 
 @custom_login_required
@@ -46,8 +50,14 @@ def register_student(request):
                 student.grade=grade
                 student.save()
                 return redirect('students')
+        else:
+            form=RegisterForm(request.POST,request.FILES)
+            messages.error(request,"Invalid credintials in form")
     return render(request, 'add-student.html',context)
 
+
+@custom_login_required
+@superadmin_required
 def register_staff(request):
     context={
         'form': RegisterForm(),
@@ -64,23 +74,29 @@ def register_staff(request):
                 staff=Staff.objects.create(user=user)
                 staff.position=position
                 staff.save()
-                return HttpResponse('admin successfully')
+                return redirect('staff')
+        else:
+            form=RegisterForm(request.POST,request.FILES)
+
+            messages.error(request,"Invalid credintials in form")
+
     return render(request, 'add-staff.html',context)
    
 @unauthorized_user
 def login_page(request):
-    context = {'form': LoginForm()}
+    context={
+        'form':LoginForm()
+    }
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None :
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            context['error'] = 'Invalid credentials'
-    
-    return render(request, 'page-login.html', context) 
+            messages.error(request,"Invalid username or password")           
+    return render(request, 'page-login.html',context)
 
 
 def logout_user(request):
