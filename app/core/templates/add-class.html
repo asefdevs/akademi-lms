@@ -1,0 +1,48 @@
+{% extends 'base_core.html' %}
+{% load static %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="{{ form.name.id_for_label }}">Name</label>
+      {{ form.name }}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.students.id_for_label }}">Student</label>
+      {{ form.students }}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.teachers.id_for_label }}">Teacher</label>
+      {{ form.teachers }}
+    </div> 
+    
+   <br><hr>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for field in form %}
+          {% if field.errors %}
+            <li>
+              <strong>{{ field.label }}</strong>: 
+              {% for error in field.errors %}
+                {{ error }}
+                <br>
+              {% endfor %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form> 
+ 
+</div>
+
+
+
+
+{% endblock %}

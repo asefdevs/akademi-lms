@@ -27,7 +27,6 @@ def register_teacher (request):
                 return redirect('teachers')
         else:
             form=RegisterForm(request.POST,request.FILES)
-            messages.error(request,"Invalid credintials in form")
 
     return render(request, 'add-teacher.html',context)
 
@@ -45,14 +44,13 @@ def register_student(request):
             user.set_password(user.password)
             user.save()
             if user.user_type == 'student':
-                grade=form.cleaned_data['grade']
                 student=Student.objects.create(user=user)
+                grade=form.cleaned_data['grade']
                 student.grade=grade
                 student.save()
                 return redirect('students')
         else:
             form=RegisterForm(request.POST,request.FILES)
-            messages.error(request,"Invalid credintials in form")
     return render(request, 'add-student.html',context)
 
 
@@ -78,7 +76,6 @@ def register_staff(request):
         else:
             form=RegisterForm(request.POST,request.FILES)
 
-            messages.error(request,"Invalid credintials in form")
 
     return render(request, 'add-staff.html',context)
    

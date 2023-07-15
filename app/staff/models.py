@@ -5,21 +5,7 @@ from ckeditor.fields import RichTextField
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='student')
-    GRADE_CHOICES = [
-        ('1', '1st Grade'),
-        ('2', '2nd Grade'),
-        ('3', '3rd Grade'),
-        ('4', '4th Grade'),
-        ('5', '5th Grade'),
-        ('6', '6th Grade'),
-        ('7', '7th Grade'),
-        ('8', '8th Grade'),
-        ('9', '9th Grade'),
-        ('10', '10th Grade'),
-        ('11', '11th Grade'),
-    ]
-    grade = models.CharField(max_length=232,choices=GRADE_CHOICES)
-    lessons = models.ManyToManyField('Lesson', related_name='students')
+    grade = models.ForeignKey('core.ClassName', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.user.username
@@ -30,7 +16,7 @@ class Student(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='teacher')
-    students = models.ManyToManyField('Student', related_name='students')
+    position=models.ForeignKey('Lesson', on_delete=models.CASCADE, related_name='teacher_position',null=True)
     about_teacher=RichTextField(null=True)
     def __str__(self):
         return self.user.username
@@ -39,7 +25,7 @@ class Teacher(models.Model):
 
 class Lesson(models.Model):
     title = models.CharField(max_length=200)
-    teacher=models.ManyToManyField(Teacher, related_name='teacher_of_lesson')
+    teacher=models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_of_lesson',null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -37,13 +37,25 @@
 
 					</li>
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-						<i class="material-symbols-outlined">person</i>
+						<i class="material-symbols-outlined">supervisor_account</i>
 						<span class="nav-text">Staff</span>
 					</a>
 					<ul aria-expanded="false">
 						<li><a href="{% url 'staff' %}">Staffs</a></li>
 						<li><a href="{% url 'register-staff' %}">Add New Staff</a></li>
 					</ul>
+					
+
+					</li>
+					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">class</i>
+						<span class="nav-text">Classes</span>
+					</a>
+					<ul aria-expanded="false">
+						<li><a href="{% url 'add_class' %}">Classes</a></li>
+						<li><a href="{% url 'add_class' %}">Add New Class</a></li>
+					</ul>
+					
 
 					</li>
 					{% endif %}
