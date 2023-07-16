@@ -145,18 +145,33 @@
 										<div class="mb-3">
 										  {{form.user_type}}
 										</div>
-										
+										<div class="mb-3">
+											<label for="exampleFormControlInput8" class="form-label text-primary">Position Teacher<span >*</span></label>
+											{{form.position_teacher}}
+										  </div>
 										  <div class="mb-3">
 											<label for="exampleFormControlInput8" class="form-label text-primary">About Teacher<span >*</span></label>
 											{{form.about_teacher}}
 										  </div>
-										  <div>
-											{% if messages %}
-											{% for message in messages  %}
-											<p class='text-danger'>{{message}}</p>
+										  
+										<hr>
+										{% if form.errors %}
+										<div class="alert alert-danger">
+										  <ul>
+											{% for field in form %}
+											  {% if field.errors %}
+												<li>
+												  <strong>{{ field.label }}</strong>: 
+												  {% for error in field.errors %}
+													{{ error }}
+													<br>
+												  {% endfor %}
+												</li>
+											  {% endif %}
 											{% endfor %}
-											{% endif %}
+										  </ul>
 										</div>
+										{% endif %}
 										
 										<button type="submit" class="btn btn-block btn-primary">Sign me up</button>
 

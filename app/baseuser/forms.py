@@ -1,6 +1,6 @@
 from . models import User
 from django import forms
-from staff.models import Staff
+from staff.models import Staff,Lesson
 from core.models import ClassName
 
 
@@ -13,8 +13,6 @@ class RegisterForm(forms.ModelForm):
         label='Confirm Password',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'})
     )
-
-
     about_teacher = forms.CharField(
         label='About Teacher',
         widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'About Teacher'}),
@@ -28,12 +26,15 @@ class RegisterForm(forms.ModelForm):
         )
     grade = forms.ModelChoiceField(
         queryset=ClassName.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
     )    
-    
-    
+    position_teacher = forms.ModelChoiceField(
+        queryset=Lesson.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=False
+    )
 
-    
     class Meta:
         model = User
         fields=('username', 'first_name', 'last_name','email', 'password','password2','user_type','gender','birthdate','country','number','profile_photo',)
@@ -64,14 +65,16 @@ class RegisterForm(forms.ModelForm):
         data = self.cleaned_data.get("username")
         if User.objects.filter(username=data).exists():
             self.add_error('username', 'Username already exists')
-            raise forms.ValidationError('This username already exists')
         return data
+    
     def clean_password(self):
-        data=self.cleaned_data.get('password')
-        if len(data)<8 :
-            raise forms.ValidationError('password must be at least 8 characters')
-
-        return data
+        data1=self.cleaned_data.get('password')
+        data2=self.cleaned_data.get('password2')
+        if len(data1)<8  :
+            self.add_error('password','password must be at least 8 characters')
+        if  data1!=data2:
+            self.add_error('password2','passwords doesnt match')    
+        return data1
 
 
     

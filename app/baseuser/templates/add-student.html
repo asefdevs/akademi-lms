@@ -149,13 +149,23 @@
 												<label for="exampleFormControlInput10" class="form-label">Password Confirm<span >*</span></label>
 											   {{form.password2}}
 										  </div>	
-										  <div>
-											{% if messages %}
-											{% for message in messages  %}
-											<p class='text-danger'>{{message}}</p>
+										  {% if form.errors %}
+										<div class="alert alert-danger">
+										  <ul>
+											{% for field in form %}
+											  {% if field.errors %}
+												<li>
+												  <strong>{{ field.label }}</strong>: 
+												  {% for error in field.errors %}
+													{{ error }}
+													<br>
+												  {% endfor %}
+												</li>
+											  {% endif %}
 											{% endfor %}
-											{% endif %}
-										</div>	
+										  </ul>
+										</div>
+										{% endif %}
 										  <button type="submit" class="btn btn-block btn-primary">Sign me up</button>
 			
 											</div>

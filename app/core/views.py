@@ -13,7 +13,6 @@ def home(request):
 
 
 def add_class(request):
-    
     form=CreateClassForm(request.POST)
     if form.is_valid():
         form.save()

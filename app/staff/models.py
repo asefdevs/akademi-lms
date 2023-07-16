@@ -5,7 +5,7 @@ from ckeditor.fields import RichTextField
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='student')
-    grade = models.ForeignKey('core.ClassName', on_delete=models.SET_NULL, null=True)
+    grade = models.ForeignKey('core.ClassName', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -25,7 +25,7 @@ class Teacher(models.Model):
 
 class Lesson(models.Model):
     title = models.CharField(max_length=200)
-    teacher=models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_of_lesson',null=True)
+    teacher=models.ManyToManyField(Teacher,  related_name='teacher_of_lesson',blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

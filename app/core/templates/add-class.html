@@ -9,12 +9,16 @@
       {{ form.name }}
     </div>
     <div class="form-group">
+      <label for="{{ form.name.id_for_label }}">Max count of Students</label>
+      {{ form.maximum_student }}
+    </div>
+    <div class="form-group">
       <label for="{{ form.students.id_for_label }}">Student</label>
       {{ form.students }}
     </div>
     <div class="form-group">
-      <label for="{{ form.teachers.id_for_label }}">Teacher</label>
-      {{ form.teachers }}
+      <label for="{{ form.teachers.id_for_label }}">Lessons</label>
+      {{ form.lessons }}
     </div> 
     
    <br><hr>

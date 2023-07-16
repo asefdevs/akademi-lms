@@ -104,7 +104,8 @@ def teacher_detail(request,teacher_id):
      context={
           'lesson':Lesson.objects.all(),
           'page_title': 'Teacher Detail',
-          'teacher':Teacher.objects.get(user_id=teacher_id)
+          'teacher':Teacher.objects.get(user_id=teacher_id),
+          'class_info': ClassName.objects.get(lessons__teacher=teacher_id)
 
      }
      return render(request,'teacher-detail.html',context)
@@ -151,7 +152,7 @@ def teacher_edit(request,teacher_id):
     context={
          'form_user': form_user,
          'form_teacher': form_teacher,
-         'teacher':teacher
+         'teacher':teacher,
     }
     return render(request, 'teacher_edit.html', context)        
 
