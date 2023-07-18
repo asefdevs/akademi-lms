@@ -24,7 +24,6 @@
 								<form method="POST" enctype="multipart/form-data">
 									{% csrf_token %}
 								<div class="row">
-									
 									<div class="col-xl-6 col-sm-6">
 										<div class="mb-3">
 											<label for="exampleFormControlInput1" class="form-label text-primary">Username<span >*</span></label>
@@ -58,7 +57,7 @@
 									  <div class="mb-3">
 										<label for="exampleFormControlInput10" class="form-label">Password Confirm<span >*</span></label>
 									   {{form.password2}}
-								  </div>										
+										  </div>										
 										
 									</div>
 									<div class="col-xl-6 col-sm-6">
@@ -111,7 +110,7 @@
 										</div>
 										{% endif %}
 										
-										<button type="submit" class="btn btn-block btn-primary">Sign me up</button>
+										<button type="submit" class="btn btn-block btn-primary">Save</button>
 
 									</div>
 								</div>

@@ -8,6 +8,7 @@ class ClassName(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField("staff.Student",related_name='student_of_class')
     lessons=models.ManyToManyField("staff.Lesson",related_name='lesson_of_class')
+    teachers=models.ManyToManyField("staff.Teacher",related_name='teacher_of_class')
 
     def __str__(self):
         return self.name

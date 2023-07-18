@@ -1,6 +1,7 @@
+from typing import Any, Dict
 from django import forms
 from .models import ClassName
-from staff.models import Student
+from staff.models import Student,Teacher,Lesson
 
 
 
@@ -9,13 +10,19 @@ from staff.models import Student
 class CreateClassForm(forms.ModelForm):
     class Meta:
         model=ClassName
+        exclude = ['teachers']
+
         fields=('name','students','lessons','maximum_student')
         widgets={
             'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
-            'students': forms.SelectMultiple(attrs={'placeholder':'Students','class':'form-control'}),
-            'lessons': forms.SelectMultiple(attrs={'placeholder':'Lessons','class':'form-control'}),
-            'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student','class':'form-control'}),
+            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students'}),
+            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
+            'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student',}),
+            'teachers': forms.CheckboxSelectMultiple()
         }
+
+
+
     def clean(self):
         cleaned_data = super().clean()
         return cleaned_data
@@ -37,21 +44,42 @@ class CreateClassForm(forms.ModelForm):
         return students
 
 
+class EditClassForm(forms.ModelForm):
+
+    class Meta:
+        model=ClassName
+        fields=('name','students','lessons','maximum_student','teachers')
+        widgets={
+            'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
+            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students',}),
+            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
+            'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student',}),
+            'teachers': forms.CheckboxSelectMultiple()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        if 'lessons' in self.initial:
+            selected_lessons = self.initial.get('lessons')
+            self.fields['teachers'].queryset = Teacher.objects.filter(position__title__in=selected_lessons)
+        else:
+            self.fields['teachers'].queryset = Teacher.objects.none()
+    
 
 
 
 
 
+    # def clean(self) :
+    #     cleaned_data=super().clean()
+    #     return cleaned_data
+    
+    # def clean_lessons(self):
+    #     lesson_data=self.cleaned_data.get('lessons')
 
 
-#   cag kimidi 
-# class EditStudentForm(forms.ModelForm):
-#     user = forms.ModelChoiceField(queryset=User.objects.filter(user_type='student'))
-#     password=None
-#     class Meta:
-#         model=Student
-#         fields=('grade',)
-#         widgets={  
-#             'user':forms.Select(attrs={'class':'form-control','placeholder':'user select','name':"student_id" ,'id':"student_id"}),
-#             'grade':forms.Select(attrs={'class':'form-control'}),
-#         }
+    
+    
+
+
