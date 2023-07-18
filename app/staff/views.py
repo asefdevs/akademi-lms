@@ -2,7 +2,7 @@ from django.shortcuts import  render, redirect
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lesson, Staff, Student,Teacher
-from .forms import EditUserForm,EditTeacherForm
+from .forms import EditUserForm,EditTeacherForm,EditStudentForm
 from django.http import JsonResponse
 import json
 from core.models import ClassName
@@ -11,17 +11,6 @@ from core.models import ClassName
 @custom_login_required
 def show_profile(request):
     user=request.user
-    # user_id = request.user.id
-    # if user.user_type == 'admin':
-    #     staff= Staff.objects.get(user_id=user_id)
-    #     context={'profile':staff}
-    # elif user.user_type == 'student':
-    #     student=Student.objects.get(user_id=user_id)
-    #     context={'profile':student}
-    # elif user.user_type == 'teacher':
-    #     teacher=Teacher.objects.get(user_id=user_id)
-    #     context={'profile':teacher}
-
  
     return render(request, 'show_profile.html',context={'user':user})
 
@@ -46,25 +35,25 @@ def student_list(request):
     return render(request, 'student.html', context)
 
 
-# @custom_login_required
-# @superadmin_required
-# def student_edit(request,student_id):
-#     student = Student.objects.get(user_id=student_id) 
-#     user=User.objects.get(id=student_id) 
-#     if request.method == 'POST':  
-#         form_user = EditUserForm(request.POST,request.FILES, instance=user)
-#         form_student=EditStudentForm(request.POST, instance=student)
-#         if form_user.is_valid() and form_student.is_valid():
-#             form_user.save()
-#             form_student.save()
-#             if 'profile_photo' in request.FILES:
-#                  user.profile_photo = request.FILES['profile_photo']
-#                  user.save()
-#             return redirect('students')  
-#     else:
-#         form_user = EditUserForm(instance=user)
-#         form_student=EditStudentForm(instance=student)
-#     return render(request, 'edit-student.html', {'form_user': form_user,'form_student':form_student ,'student': student})
+@custom_login_required
+@superadmin_required
+def student_edit(request,student_id):
+    student = Student.objects.get(user_id=student_id) 
+    user=User.objects.get(id=student_id) 
+    if request.method == 'POST':  
+        form_user = EditUserForm(request.POST,request.FILES, instance=user)
+        form_student=EditStudentForm(request.POST, instance=student)
+        if form_user.is_valid() and form_student.is_valid():
+            form_user.save()
+            form_student.save()
+            if 'profile_photo' in request.FILES:
+                 user.profile_photo = request.FILES['profile_photo']
+                 user.save()
+            return redirect('students')  
+    else:
+        form_user = EditUserForm(instance=user)
+        form_student=EditStudentForm(instance=student)
+    return render(request, 'edit-student.html', {'form_user': form_user,'form_student':form_student ,'student': student})
 
 
 @custom_login_required

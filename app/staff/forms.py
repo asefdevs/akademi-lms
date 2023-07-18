@@ -34,13 +34,13 @@ class EditUserForm(UserChangeForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
         }
 
-# class EditStudentForm(forms.ModelForm):
-#     class Meta:
-#         model = Student
-#         fields = ('grade',)
-#         widgets = {
-#             'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Grade'}),
-#         }
+class EditStudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ('grade',)
+        widgets = {
+            'grade': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Grade'}),
+        }
 
 class EditTeacherForm(forms.ModelForm):
     class Meta:

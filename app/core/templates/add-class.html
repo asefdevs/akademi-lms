@@ -1,6 +1,10 @@
 {% extends 'base_core.html' %}
 {% load static %}
 {% block content %}
+{% include 'partials/navheader-preloader.html' %}
+{% include 'partials/header.html' %}
+{% include 'partials/sidebar.html' %}
+
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
   <form method="post">
     {% csrf_token %}

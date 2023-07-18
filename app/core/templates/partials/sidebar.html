@@ -6,15 +6,27 @@
         <div class="dlabnav">
 			<div class="dlabnav-scroll">	
 				<ul class="metismenu" id="menu">
-					{% if request.user.user_type == 'student' or request.user.user_type == 'teacher' or request.user.user_type == 'admin' %}
+					{% if request.user.user_type == 'student' or request.user.user_type == 'teacher' %}
 							<li>
 						<a href="{% url 'home' %}" class=" nav-text " href="javascript:void(0);" aria-expanded="false">
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 							</li>
+							<li>
+								<a href="{% url 'student_detail' request.user.id %}" class=" nav-text " href="javascript:void(0);" aria-expanded="false">
+									<i class="material-symbols-outlined">info_outline</i>
+									<span class="nav-text">My Details</span>
+								</a>
+							</li>
 					{% endif %}
 					{% if request.user.user_type == 'admin' %}
+					<li>
+						<a href="{% url 'home' %}" class=" nav-text " href="javascript:void(0);" aria-expanded="false">
+							<i class="material-symbols-outlined">home</i>
+							<span class="nav-text">Dashboard</span>
+						</a>
+							</li>
 
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">school</i>
