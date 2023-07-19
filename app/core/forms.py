@@ -18,10 +18,22 @@ class CreateClassForm(forms.ModelForm):
             'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students'}),
             'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
             'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student',}),
-            'teachers': forms.CheckboxSelectMultiple()
         }
-
-
+    
+    def __init__(self, *args, **kwargs):
+        super(CreateClassForm,self).__init__(*args, **kwargs)
+        students=Student.objects.all()
+        for student in students:
+            exist_student=ClassName.objects.filter(students__user__username=student)
+            if exist_student.exists():
+                students=students.exclude(user__username=student)
+        self.fields['students'].queryset=students
+        if not students.exists():
+            students = Student.objects.none()
+            self.fields['students'].queryset = students
+            self.fields['students'].empty_label = 'No unregistered student found'
+            self.errors['students']='x'
+            
 
     def clean(self):
         cleaned_data = super().clean()
@@ -33,15 +45,15 @@ class CreateClassForm(forms.ModelForm):
             if ClassName.objects.filter(name=name).exists():
                 self.add_error('name', 'This class already exists')
         return name
-
-    def clean_students(self):
+    
+    def clean_maximum_students(self):
+        max_students=self.cleaned_data.get('maximum_student')
         students = self.cleaned_data.get('students')
-        if students:
-            for student in students:
-                if ClassName.objects.filter(students__user__username=student).exists():
-                     self.add_error('students', f"The student '{student}' already exists in another class.")
-
-        return students
+        print(students.count())
+        if  students.count() > max_students:
+            print(students.count())
+            self.add_error('maximum_student','Count of Students exceeded maximum limit')
+        return max_students
 
 
 class EditClassForm(forms.ModelForm):

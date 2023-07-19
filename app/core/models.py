@@ -14,4 +14,10 @@ class ClassName(models.Model):
         return self.name
     class Meta:
         verbose_name_plural = ('Class')
+
+class Notification(models.Model):
+    message=models.CharField(max_length=255)
+    user=models.ForeignKey('baseuser.User',on_delete=models.CASCADE ,related_name='received_user')
+    time=models.DateTimeField(auto_now_add=True)
+
     

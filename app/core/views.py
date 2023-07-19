@@ -12,8 +12,14 @@ def home(request):
     context={
         'user_details': User.objects.all(),
         'page_title':'Home',
+        'class_details': ClassName.objects.all(),
     }
     return render(request,'index.html',context)
+def class_list(request):
+    context={
+        'classes':ClassName.objects.all(),
+    }
+    return render(request,'class_list.html',context)
 
 @custom_login_required
 @superadmin_required

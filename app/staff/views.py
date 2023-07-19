@@ -20,6 +20,7 @@ def show_profile(request):
 def student_list(request):
     search_query = request.GET.get('search_query')
     filter_option = request.GET.get('filter_option')
+    filter_option_class = request.GET.get('filter_option_class')
     students=Student.objects.all()
     if search_query:
         students=students.filter(user__first_name__icontains=search_query)
@@ -27,10 +28,13 @@ def student_list(request):
         students=students.order_by('-user__created_at')
     elif filter_option == 'recent':
         students=students.order_by('user__created_at')
+    if filter_option_class:
+        students=students.filter(grade__name__icontains=filter_option_class)
     context = {
         'students': students,
         'search_query': search_query ,
-        'filter_option' : filter_option
+        'filter_option' : filter_option,
+        'classes':ClassName.objects.all(),
     }
     return render(request, 'student.html', context)
 

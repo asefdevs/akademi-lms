@@ -111,7 +111,9 @@ def login_page(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request,"Invalid username or password")           
+            messages.error(request,"Invalid username or password")
+ 
+         
     return render(request, 'page-login.html',context)
 
 

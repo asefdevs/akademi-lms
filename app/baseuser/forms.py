@@ -69,12 +69,15 @@ class RegisterForm(forms.ModelForm):
     
     def clean_password(self):
         data1=self.cleaned_data.get('password')
-        data2=self.cleaned_data.get('password2')
-        if len(data1)<8  :
+        if len(data1)<8 :
             self.add_error('password','password must be at least 8 characters')
-        if  data1!=data2:
-            self.add_error('password2','passwords doesnt match')    
-        return data1
+        return data1    
+    def clean_password2(self):
+        data1=self.cleaned_data.get('password')
+        data2=self.cleaned_data.get('password2')
+        if data1 and data2 and data1 != data2:
+            self.add_error('password2','Passwords doesnt match')
+        return data2
 
 
     
@@ -87,14 +90,7 @@ class LoginForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'username'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'password'}),
         }
-   
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     username = cleaned_data.get('username')
-    #     if  User.objects.filter(username=username).exists():
-    #         self.add_error('username', 'Username does not exist.')
 
-    #     return cleaned_data
 
 
 
