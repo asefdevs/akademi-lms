@@ -12,12 +12,11 @@ class CreateClassForm(forms.ModelForm):
         model=ClassName
         exclude = ['teachers']
 
-        fields=('name','students','lessons','maximum_student')
+        fields=('name','students','lessons','teachers',)
         widgets={
             'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
             'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students'}),
-            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
-            'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student',}),
+            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons', 'class': 'lesson-select'}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -33,7 +32,7 @@ class CreateClassForm(forms.ModelForm):
             self.fields['students'].queryset = students
             self.fields['students'].empty_label = 'No unregistered student found'
             self.errors['students']='x'
-            
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -46,52 +45,66 @@ class CreateClassForm(forms.ModelForm):
                 self.add_error('name', 'This class already exists')
         return name
     
-    def clean_maximum_students(self):
-        max_students=self.cleaned_data.get('maximum_student')
-        students = self.cleaned_data.get('students')
-        print(students.count())
-        if  students.count() > max_students:
-            print(students.count())
-            self.add_error('maximum_student','Count of Students exceeded maximum limit')
-        return max_students
 
-
-class EditClassForm(forms.ModelForm):
-
+class DefineTeachersForm(forms.ModelForm):
     class Meta:
         model=ClassName
-        fields=('name','students','lessons','maximum_student','teachers')
+        fields=('name','teachers','lessons','students')
         widgets={
-            'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
-            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students',}),
-            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
-            'maximum_student':forms.NumberInput(attrs={'placeholder':'max_student',}),
+            'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control','readonly':'readonly'}),
+            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students','readonly':'readonly'}),
+            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons','readonly':'readonly'}),
             'teachers': forms.CheckboxSelectMultiple()
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['students'].widget=forms.MultipleHiddenInput()
+        self.fields['lessons'].widget=forms.MultipleHiddenInput()
+
         
         if 'lessons' in self.initial:
             selected_lessons = self.initial.get('lessons')
             self.fields['teachers'].queryset = Teacher.objects.filter(position__title__in=selected_lessons)
         else:
             self.fields['teachers'].queryset = Teacher.objects.none()
-    
+
+class EditClassForm(forms.ModelForm):
+
+    class Meta:
+        model=ClassName
+        fields=('name','students','lessons','teachers')
+        widgets={
+            'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
+            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students',}),
+            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
+            'teachers': forms.CheckboxSelectMultiple()
+        }
+
+    def __init__(self,*args, **kwargs):
+        super(EditClassForm,self).__init__(*args,**kwargs)
+        class_name=self.instance.name
+        class_instance = ClassName.objects.get(name=class_name)
+        students_of_class = class_instance.students.all()
+        print(students_of_class)
+        # for student in students_of_class:
 
 
 
 
+        #     exist_student=ClassName.objects.filter(students__grade=class_name)
+        #     if exist_student.exists():
+        #         students=students.get(user__username=student)
+        # self.fields['students'].queryset=students
+        # if not students.exists():
+        #     students = Student.objects.none()
+        #     self.fields['students'].queryset = students
+        #     self.fields['students'].empty_label = 'No unregistered student found'
+        #     self.errors['students']='x'
+            
+            
 
-    # def clean(self) :
-    #     cleaned_data=super().clean()
-    #     return cleaned_data
-    
-    # def clean_lessons(self):
-    #     lesson_data=self.cleaned_data.get('lessons')
 
-
-    
     
 
 

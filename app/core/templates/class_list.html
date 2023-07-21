@@ -28,7 +28,7 @@
 												<option value="recent" {% if filter_option == 'recent' %}selected{% endif %}>Recent</option>
 											</select>
 											<select name="filter_option_class" class="btn" aria-label="Default">
-												{% for class in classes  %}
+												{% for class in class_list  %}
 												<option value="{{class.name}}" {% if filter_option_class == 'student.grade' %}selected{% endif %}>{{class.name}}</option>
 												{% endfor %}
 											</select>
@@ -72,7 +72,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for class in classes  %}
+                                            {% for class in class_list  %}
 
                                             <tr>
                                                 <td>{{class.id}}</td>

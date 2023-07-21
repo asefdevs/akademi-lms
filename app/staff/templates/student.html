@@ -24,12 +24,15 @@
 										
 										
 											<select name="filter_option" class="btn" aria-label="Default">
+												<option value="" {% if not filter_option  %}selected{% endif %}>Order by</option>
 												<option value="oldest" {% if filter_option == 'oldest' %}selected{% endif %}>Oldest</option>
+
 												<option value="recent" {% if filter_option == 'recent' %}selected{% endif %}>Recent</option>
 											</select>
 											<select name="filter_option_class" class="btn" aria-label="Default">
+												<option value=""{% if not filter_option_class  %} selected {% endif %}>Select Class</option>
 												{% for class in classes  %}
-												<option value="{{class.name}}" {% if filter_option_class == 'student.grade' %}selected{% endif %}>{{class.name}}</option>
+												<option value="{{ class.name }}" {% if filter_option_class == 'class.name' %}selected{% endif %}>{{class.name}}</option>
 												{% endfor %}
 											</select>
 

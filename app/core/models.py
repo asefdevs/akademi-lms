@@ -1,12 +1,12 @@
 from django.db import models
+from django.core.validators import MaxValueValidator
 
 # Create your models here.
 
 class ClassName(models.Model):
     name=models.CharField(max_length=10)
-    maximum_student=models.IntegerField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField("staff.Student",related_name='student_of_class')
+    students = models.ManyToManyField("staff.Student",related_name='student_of_class',)
     lessons=models.ManyToManyField("staff.Lesson",related_name='lesson_of_class')
     teachers=models.ManyToManyField("staff.Teacher",related_name='teacher_of_class')
 

@@ -4,8 +4,7 @@ from . forms import RegisterForm,LoginForm
 from staff.models import Staff, Student,Teacher,Lesson
 from .decorators import unauthorized_user,superadmin_required,custom_login_required
 from django.contrib import messages
-from django.forms import ValidationError
-from core.models import ClassName
+from core.models import ClassName,Notification
 
 
 # Create your views here.
@@ -61,6 +60,9 @@ def register_student(request):
                 student.save()
                 class_info=ClassName.objects.get(name=grade)
                 class_info.students.add(student)
+                message=f'You are added to the class : {class_info.name} '
+                notification=Notification.objects.create(message=message,user=user)
+                notification.save()
                 return redirect('students')
         else:
             print(form.errors)

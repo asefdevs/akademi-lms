@@ -6,6 +6,8 @@ from .forms import EditUserForm,EditTeacherForm,EditStudentForm
 from django.http import JsonResponse
 import json
 from core.models import ClassName
+from django.db.models import Q
+
 
 
 @custom_login_required
@@ -22,19 +24,30 @@ def student_list(request):
     filter_option = request.GET.get('filter_option')
     filter_option_class = request.GET.get('filter_option_class')
     students=Student.objects.all()
-    if search_query:
-        students=students.filter(user__first_name__icontains=search_query)
-    if filter_option == 'oldest':
-        students=students.order_by('-user__created_at')
-    elif filter_option == 'recent':
+    if search_query and  filter_option_class and (filter_option == 'oldest' or filter_option == 'recent'):
+        if filter_option == 'oldest':
+            students=students.filter(
+                Q(user__first_name__icontains=search_query) | Q(user__last_name__icontains=search_query),
+                grade__name__icontains=filter_option_class
+                ).order_by('user__created_at')
+        elif filter_option == 'recent':
+            students=students.filter(
+                Q(user__first_name__icontains=search_query) | Q(user__last_name__icontains=search_query),
+                grade__name__icontains=filter_option_class
+                ).order_by('-user__created_at')
+
+    elif filter_option == 'oldest':
         students=students.order_by('user__created_at')
-    if filter_option_class:
+    elif filter_option == 'recent':
+        students=students.order_by('-user__created_at')
+    elif filter_option_class:
         students=students.filter(grade__name__icontains=filter_option_class)
     context = {
         'students': students,
         'search_query': search_query ,
         'filter_option' : filter_option,
-        'classes':ClassName.objects.all(),
+        'filter_option_class' : filter_option_class,
+        'classes': ClassName.objects.all(),
     }
     return render(request, 'student.html', context)
 
