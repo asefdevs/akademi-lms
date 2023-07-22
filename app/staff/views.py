@@ -35,6 +35,8 @@ def student_list(request):
                 Q(user__first_name__icontains=search_query) | Q(user__last_name__icontains=search_query),
                 grade__name__icontains=filter_option_class
                 ).order_by('-user__created_at')
+    elif search_query:
+        students=students.filter( Q(user__first_name__icontains=search_query) | Q(user__last_name__icontains=search_query))    
 
     elif filter_option == 'oldest':
         students=students.order_by('user__created_at')
@@ -111,7 +113,6 @@ def teacher_detail(request,teacher_id):
           'lesson':Lesson.objects.all(),
           'page_title': 'Teacher Detail',
           'teacher':Teacher.objects.get(user_id=teacher_id),
-          'class_info': ClassName.objects.get(lessons__teacher=teacher_id)
 
      }
      return render(request,'teacher-detail.html',context)
