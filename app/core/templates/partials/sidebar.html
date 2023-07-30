@@ -26,7 +26,7 @@
 							<i class="material-symbols-outlined">home</i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-							</li>
+					</li>
 
 					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
 						<i class="material-symbols-outlined">school</i>
@@ -66,6 +66,17 @@
 					<ul aria-expanded="false">
 						<li><a href="{% url 'classes' %}">Classes</a></li>
 						<li><a href="{% url 'add_class' %}">Add New Class</a></li>
+					</ul>
+					
+
+					</li>
+					<li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+						<i class="material-symbols-outlined">history_edu</i>
+						<span class="nav-text">Lessons</span>
+					</a>
+					<ul aria-expanded="false">
+						<li><a href="">Lessons</a></li>
+						<li><a href="{% url 'add-lesson' %}">Add New Lesson</a></li>
 					</ul>
 					
 

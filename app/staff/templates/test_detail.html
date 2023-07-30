@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Students Data</title>
+</head>
+<body>
+    <h1> Student {{student.user.first_name}}'s Data</h1>
+    <h2>Active Season : {{active_season}}</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Season Name</th>
+                <th>Section</th>
+                <th>Teacher</th>
+                <th>Lesson</th>
+            </tr>
+        </thead>
+        {% for data in student_data_active %}   
+        <tbody>
+            <tr>
+                     <td>{{ data.season_name }}</td>
+
+                    <td>{{ data.section }}</td>
+                    <td>{{ data.teacher }}</td>
+                    <td>{{ data.lesson }}</td>
+                </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+
+    <h2>Past Seasons</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Season Name</th>
+                <th>Section</th>
+                <th>Teacher</th>
+                <th>Lesson</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in student_data_past %}
+                <tr>
+                    <td>{{ data.season_name }}</td>
+                    <td>{{ data.section }}</td>
+                    <td>{{ data.teacher }}</td>
+                    <td>{{ data.lesson }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

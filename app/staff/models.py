@@ -3,36 +3,42 @@ from baseuser.models import User
 from ckeditor.fields import RichTextField
 
 
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='student')
-    grade = models.ForeignKey('core.ClassName', on_delete=models.SET_NULL, blank=True, null=True)
-
+class Students(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='student_user')
+    lesson = models.ManyToManyField('Lessons', related_name='students',blank=True)
     def __str__(self):
         return self.user.username
-
     class Meta:
-        verbose_name_plural = 'Students'    
+        verbose_name_plural = 'Students' 
 
+class Lessons(models.Model):
+    title=models.CharField(max_length=50)
+    season=models.ForeignKey('core.Seasons',on_delete=models.CASCADE,related_name='season_of_lesson')
+    section=models.ManyToManyField('Sections',related_name='section_of_lesson',blank=True)
+    def __str__(self):
+        return self.title
+    class Meta:
+        verbose_name_plural = 'Lessons' 
 
-class Teacher(models.Model):
+class Sections(models.Model):
+    title=models.CharField(max_length=50)
+    teacher=models.ForeignKey('Teachers', on_delete=models.SET_NULL,related_name='teacher_of_seasonLesson',null=True)
+    students=models.ManyToManyField('Students', blank=True,related_name='students_of_section')
+    max_student_count=models.IntegerField(null=True)
+    def __str__(self):
+        return self.title
+    class Meta:
+        verbose_name_plural = 'Sections' 
+class Teachers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='teacher')
-    position=models.ForeignKey('Lesson', on_delete=models.CASCADE, related_name='teacher_position',null=True)
-    about_teacher=RichTextField(null=True)
+    position=models.CharField(max_length=250)
+    about_teacher=models.TextField(null=True , blank=True)
+
     def __str__(self):
         return self.user.username
     class Meta:
         verbose_name_plural = 'Teachers' 
 
-class Lesson(models.Model):
-    title = models.CharField(max_length=200)
-    teacher=models.ManyToManyField(Teacher,  related_name='teacher_of_lesson',blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-    class Meta:
-        verbose_name_plural = 'Lessons' 
 
 class Staff(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE,primary_key=True,related_name='staff')

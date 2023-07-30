@@ -92,7 +92,7 @@
 											</li>
 											<li>
 												<span>Grade</span>
-												<h5 class="mb-0">{{student.grade}}</h5>
+												<h5 class="mb-0">{{classname}}</h5>
 											</li>
 										</ul>
 									</div>
@@ -101,28 +101,54 @@
 						</div>
 						<div class="card h-auto">
 							<div class="card-body ">
-								<div class="teacher-deatails">
-									<h3 class="heading">Lessons List</h3>
-							<div class="table-responsive">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<th>ID</th>
-											<th>Teacher Name</th>
-										</tr>
-									</thead>
-									<tbody>
-										{% for lesson in student.grade.lessons.all %}
-											<tr>
-												<td>{{ lesson.title }}</td>
-												<td>													
-													{{ lesson.teacher.user.first_name }} {{ lesson.teacher.user.last_name }}
-												</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-								</table>
-							</div>
+								<div class="student-deatails">
+										<h3 class="heading">Current Season Information</h3>
+										<div class="table-responsive">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th>Season Name</th>
+														<th>Section</th>
+														<th>Teacher</th>
+														<th>Lesson</th>
+													</tr>
+												</thead>
+												{% for data in student_data_active %}   
+												<tbody>
+													<tr>
+															<td>{{ data.season_name }}</td>
+															<td>{{ data.section }}</td>
+															<td>{{ data.teacher }}</td>
+															<td>{{ data.lesson }}</td>
+														</tr>
+													</tbody>
+												{% endfor %}
+											</table>
+
+											<h3 class="heading">Past Season Information</h3>
+											<div class="table-responsive">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th>Season Name</th>
+															<th>Section</th>
+															<th>Teacher</th>
+															<th>Lesson</th>
+														</tr>
+													</thead>
+													{% for data in student_data_past %}   
+													<tbody>
+														<tr>
+																<td>{{ data.season_name }}</td>
+																<td>{{ data.section }}</td>
+																<td>{{ data.teacher }}</td>
+																<td>{{ data.lesson }}</td>
+															</tr>
+														</tbody>
+													{% endfor %}
+												</table>
+											</div>	
+										</div>
 								</div>
 							</div>
 						</div>

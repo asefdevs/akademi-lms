@@ -102,7 +102,7 @@
                                 <img src="{% static 'images/svg/student_icon.svg' %}" alt="">
                           	
                         </li>
-                        <li><span>Students:</span><h5 class="mb-0">{{ class_info.students.count }}</h5></li>
+                        <li><span>Students Count:</span><h5 class="mb-0">{{ teacher_data_past.0.students.all.count }}</h5></li>
                     </ul>
                 </div>
                 
@@ -123,33 +123,116 @@
         <div class="card">
             <div class="card-body">
                 <div class="teacher-deatails">
-                    <h3 class="heading">Students List</h3>
+					{% if teacher_data_active %}
+                    <h3 class="heading">Active Season Data</h3>
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th>ID</th>
-							<th>First Name</th>
-							<th>Last Name</th>
-							<th>Grade<th>
+							<th>Season Name</th>
+							<th>Lesson</th>
+							<th>Section</th>
+							<th>Count of Students</th>
+							<th>Students</th>
 						</tr>
 					</thead>
+					{% for data in teacher_data_active%}
 					<tbody>
-						{% for student in teacher.students.all %}
 							<tr>
-								<td>{{ student.user_id }}</td>
-								<td>{{ student.user.first_name }}</td>
-								<td>{{ student.user.last_name }}</td>
-								<td>{{ student.grade }}</td>
+								<td>{{ data.season_name }}</td>
+								<td>{{ data.lesson }}</td>
+								<td>{{ data.section}}</td>
+								<td>{{ data.students.all.count }}</td>
+								<td>
+                                    <ul class="student-list">
+                                        {% for student in data.students.all|slice:":2" %}
+                                        <li>{{ student.user.username }}</li>
+                                        {% endfor %}
+                                    </ul>
+									<a onclick="scrollToAllStudentsTable()"><i class="material-icons">visibility</i></a>
+                                </td>
 							</tr>
-						{% endfor %}
-					</tbody>
+						</tbody>
+					{% endfor %}
 				</table>
 			</div>
+			{% else %}
+			<h3 class="heading">Active Season Data</h3>
+			<h6 >NO Data Available</h6>
+			<hr><hr>
+			{% endif %}
+			<h3 class="heading">Past Seasons's Data</h3>
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Season Name</th>
+							<th>Lesson</th>
+							<th>Section</th>
+							<th>Count of Students</th>
+							<th>Students</th>
+						</tr>
+					</thead>
+					{% for data in teacher_data_past%}
+					<tbody>
+							<tr>
+								<td>{{ data.season_name }}</td>
+								<td>{{ data.lesson }}</td>
+								<td>{{ data.section}}</td>
+								<td>{{ data.students.all.count }}</td>
+								<td>
+                                    <ul class="student-list">
+                                        {% for student in data.students.all|slice:":2" %}
+                                        <li>{{ student.user.username }}</li>
+                                        {% endfor %}
+                                    </ul>
+									<a onclick="scrollToAllStudentsTable()"><i class="material-icons">visibility</i></a>
+                                </td>
+							</tr>
+						</tbody>
+					{% endfor %}
+				</table>
+			</div>
+			<hr><hr>
+			{% if teacher_data_active %}
+			<h3 class="heading">Active Season's Students</h3>
+			<div class="table-responsive " id='all-students-table'>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Student</th>
+							<th>Lesson</th>
+							<th>Section</th>
+						</tr>
+					</thead>
+					{% for data in teacher_data_active%}
+					<tbody>
+						<tr>
+							<td>
+									{% for student in data.students.all %}
+                                    <ul class="student-list">
+                                        <li>{{ student.user.username }} </li>
+                                    </ul>
+									{% endfor %}
+                                </td>
+								<td>{{ data.lesson }}</td>
+								<td>{{ data.section}}</td>
+								
+							</tr>
+						</tbody>
+					{% endfor %}
+				</table>
+			</div>
+			{% else %}
+			<h3 class="heading">Active Season Data</h3>
+			<h6 >No Data Available</h6>
+			{% endif %}
+
                 </div>
             </div>
         </div>
     </div>
+
 	
 	</div>
 					<div class="col-xl-3">
@@ -286,41 +369,15 @@
 				</div>
 			</div>
 		</div>
-		<!--**********************************
-					moal
-				***********************************-->
-		
-		
-        <!--**********************************
-            Content body end
-        ***********************************-->
-	   
-		
-		<!--**********************************
-				Footer start
-			***********************************-->
-			<div class="footer out-footer style-2">
-				<div class="copyright">
-					<p>Copyright © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">DexignLab</a> 2023</p>
-				</div>
-			</div>
-			
-			<!--**********************************
-				Footer end
-			***********************************-->
-        <!--**********************************
-           Support ticket button start
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button end
-        ***********************************-->
-        
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
-	
-	<!--removeIf(production)-->
+
+	<script>
+		function scrollToAllStudentsTable() {
+			const allStudentsTable = document.getElementById("all-students-table");
+			if (allStudentsTable) {
+				allStudentsTable.scrollIntoView({ behavior: "smooth" });
+			}
+		}
+	</script>
         
 {% endblock %}

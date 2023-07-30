@@ -1,10 +1,11 @@
 from django.contrib import admin
-from staff.models import Student,Teacher,Lesson,Staff
+from staff.models import Students,Teachers,Lessons,Staff,Sections
 
 
 
-admin.site.register(Student)
-admin.site.register(Teacher)
-admin.site.register(Lesson)
+admin.site.register(Students)
+admin.site.register(Teachers)
+admin.site.register(Lessons)
 admin.site.register(Staff)
+admin.site.register(Sections)
 

@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth import login,logout,authenticate
 from . forms import RegisterForm,LoginForm
-from staff.models import Staff, Student,Teacher,Lesson
+from staff.models import Staff, Students,Teachers,Lessons
 from .decorators import unauthorized_user,superadmin_required,custom_login_required
 from django.contrib import messages
-from core.models import ClassName,Notification
+from core.models import Classes,Notification
 
 
 # Create your views here.
@@ -26,10 +26,10 @@ def register_teacher(request):
             if user.user_type == 'teacher':
                 about_teacher = form.cleaned_data['about_teacher']
                 position_teacher = form.cleaned_data['position_teacher']  
-                teacher = Teacher.objects.create(user=user, about_teacher=about_teacher, position=position_teacher)
+                teacher = Teachers.objects.create(user=user, about_teacher=about_teacher, position=position_teacher)
                 teacher.save()
-                lessons=Lesson.objects.get(title=position_teacher)
-                lessons.teacher.add(teacher)
+                # lessons=Lesson.objects.get(title=position_teacher)
+                # lessons.teacher.add(teacher)
                 return redirect('teachers')
         else:
             print(form.errors)
@@ -54,12 +54,12 @@ def register_student(request):
             user.set_password(user.password)
             user.save()
             if user.user_type == 'student':
-                student=Student.objects.create(user=user)
-                grade=form.cleaned_data['grade']
-                student.grade=grade
+                student=Students.objects.create(user=user)
+                # student.grade=grade
                 student.save()
-                class_info=ClassName.objects.get(name=grade)
-                class_info.students.add(student)
+                classname=form.cleaned_data['classname']
+                class_info=Classes.objects.get(name=classname)
+                class_info.student.add(student)
                 message=f'You are added to the class : {class_info.name} '
                 notification=Notification.objects.create(message=message,user=user)
                 notification.save()
@@ -76,17 +76,16 @@ def register_student(request):
 @superadmin_required
 def register_staff(request):
     context = {
-        'form': RegisterForm(initial={'user_type': 'admin'}),
+        'form': RegisterForm(initial={'user_type':'admin'}),
         'page_title': 'Register Staff',
     }
 
     if request.method == 'POST':
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save(commit=False)
+            user = form.save()
             user.set_password(form.cleaned_data['password'])
             user.save()
-
             if user.user_type == 'admin':
                 position = form.cleaned_data['position_staff']
                 staff = Staff.objects.create(user=user, position=position)
@@ -94,10 +93,9 @@ def register_staff(request):
                 return redirect('staff')
         else:
             print(form.errors)
-    else:
-        form = RegisterForm()
+            context['form']=form
 
-    context['form'] = form
+
     return render(request, 'add-staff.html', context)
    
 @unauthorized_user

@@ -1,19 +1,32 @@
 from django.db import models
-from django.core.validators import MaxValueValidator
 
 # Create your models here.
 
-class ClassName(models.Model):
-    name=models.CharField(max_length=10)
-    created_at = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField("staff.Student",related_name='student_of_class',)
-    lessons=models.ManyToManyField("staff.Lesson",related_name='lesson_of_class')
-    teachers=models.ManyToManyField("staff.Teacher",related_name='teacher_of_class')
-
+class Classes(models.Model):
+    name=models.CharField(max_length=255,null=True)
+    student=models.ManyToManyField('staff.Students',related_name='class_of_students',blank=True)
     def __str__(self):
         return self.name
     class Meta:
-        verbose_name_plural = ('Class')
+        verbose_name_plural = 'Classes'
+
+class Seasons(models.Model):
+    season_name=models.CharField(max_length=50)
+    def __str__(self):
+        return self.season_name
+    class Meta:
+        verbose_name_plural = 'Seasons'
+
+ 
+class Settings(models.Model):
+    active_season = models.ForeignKey('Seasons', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.active_season.season_name 
+
+    class Meta:
+        verbose_name_plural = 'Settings'
+
 
 class Notification(models.Model):
     message=models.CharField(max_length=255)

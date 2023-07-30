@@ -1,7 +1,8 @@
 from typing import Any, Dict
 from django import forms
-from .models import ClassName
-from staff.models import Student,Teacher,Lesson
+from . models import Classes,Seasons
+from staff.models import Students,Sections,Lessons
+
 
 
 
@@ -9,29 +10,25 @@ from staff.models import Student,Teacher,Lesson
 
 class CreateClassForm(forms.ModelForm):
     class Meta:
-        model=ClassName
-        exclude = ['teachers']
-
-        fields=('name','students','lessons','teachers',)
+        model=Classes
+        fields=('name','student')
         widgets={
             'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
-            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students'}),
-            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons', 'class': 'lesson-select'}),
+            'student': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students'}),        
         }
-    
     def __init__(self, *args, **kwargs):
         super(CreateClassForm,self).__init__(*args, **kwargs)
-        students=Student.objects.all()
+        students=Students.objects.all()
         for student in students:
-            exist_student=ClassName.objects.filter(students__user__username=student)
+            exist_student=Classes.objects.filter(student__user__username=student)
             if exist_student.exists():
                 students=students.exclude(user__username=student)
-        self.fields['students'].queryset=students
+        self.fields['student'].queryset=students
         if not students.exists():
-            students = Student.objects.none()
-            self.fields['students'].queryset = students
-            self.fields['students'].empty_label = 'No unregistered student found'
-            self.errors['students']='x'
+            students = Students.objects.none()
+            self.fields['student'].queryset = students
+            self.fields['student'].empty_label = 'No unregistered student found'
+            self.errors['student']='x'
 
 
     def clean(self):
@@ -41,70 +38,95 @@ class CreateClassForm(forms.ModelForm):
     def clean_name(self):
         name=self.cleaned_data.get('name')
         if name:
-            if ClassName.objects.filter(name=name).exists():
+            if Classes.objects.filter(name=name).exists():
                 self.add_error('name', 'This class already exists')
         return name
     
 
-class DefineTeachersForm(forms.ModelForm):
-    class Meta:
-        model=ClassName
-        fields=('name','teachers','lessons','students')
-        widgets={
-            'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control','readonly':'readonly'}),
-            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students','readonly':'readonly'}),
-            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons','readonly':'readonly'}),
-            'teachers': forms.CheckboxSelectMultiple()
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['students'].widget=forms.MultipleHiddenInput()
-        self.fields['lessons'].widget=forms.MultipleHiddenInput()
-
-        
-        if 'lessons' in self.initial:
-            selected_lessons = self.initial.get('lessons')
-            self.fields['teachers'].queryset = Teacher.objects.filter(position__title__in=selected_lessons)
-        else:
-            self.fields['teachers'].queryset = Teacher.objects.none()
+from itertools import chain
 
 class EditClassForm(forms.ModelForm):
-
     class Meta:
-        model=ClassName
-        fields=('name','students','lessons','teachers')
+        model=Classes
+        fields=('name','student',)
         widgets={
             'name': forms.TextInput(attrs={'placeholder':'Class Name','class':'form-control'}),
-            'students': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students',}),
-            'lessons': forms.CheckboxSelectMultiple(attrs={'placeholder':'Lessons',}),
-            'teachers': forms.CheckboxSelectMultiple()
+            'student': forms.CheckboxSelectMultiple(attrs={'placeholder':'Students',}),
+
         }
 
-    def __init__(self,*args, **kwargs):
-        super(EditClassForm,self).__init__(*args,**kwargs)
-        class_name=self.instance.name
-        class_instance = ClassName.objects.get(name=class_name)
-        students_of_class = class_instance.students.all()
-        print(students_of_class)
-        # for student in students_of_class:
+    def __init__(self,*args,**kwargs):
+        super(EditClassForm, self).__init__(*args,**kwargs)
+        all_students = Students.objects.all()
+        student_of_classes = []
+        student_of_other_classes=[]
+
+        for student in all_students:
+            if student in self.instance.student.all():
+                status = student.class_of_students.last() 
+                student_of_classes.append((student.pk, f"{student} - {status}"))
+            else:
+                status = student.class_of_students.last()
+                student_of_other_classes.append((student.pk, f"{student} - {status}"))
+        print(student_of_classes)
+        student_choices = list(chain(student_of_classes, student_of_other_classes))
+        print(student_choices)
+
+
+        # Update the 'student' field choices with the modified list
+        self.fields['student'].choices = student_choices
+        print(self.fields['student'].choices)
 
 
 
+class AddLessonForm(forms.ModelForm):
+    # section=forms.CharField(
+    #     widget=forms.TextInput(attrs={'class':'form-control'}),
+    # )
+    class Meta:
+        model=Lessons
+        fields=('title', 'season','section',)
+        widgets={
+            'title': forms.TextInput(attrs={'class':'form-control'}),
+            'season':forms.Select(attrs={'class':'form-control'}),
+            'section':forms.SelectMultiple(attrs={'class':'form-select'}),
+        }
+    # def clean_section(self):
+    #     section_title = self.cleaned_data['section']
+    #     section, created = Sections.objects.get_or_create(title=section_title)
+    #     return section
+    # def __init__(self,*args,**kwargs):
+    #     super(AddLessonForm,self).__init__(*args,**kwargs)
+    #     self.fields['section'].widget=forms.TextInput()
 
-        #     exist_student=ClassName.objects.filter(students__grade=class_name)
-        #     if exist_student.exists():
-        #         students=students.get(user__username=student)
-        # self.fields['students'].queryset=students
-        # if not students.exists():
-        #     students = Student.objects.none()
-        #     self.fields['students'].queryset = students
-        #     self.fields['students'].empty_label = 'No unregistered student found'
-        #     self.errors['students']='x'
-            
-            
 
+class EditLessonForm(forms.ModelForm):
+    class Meta:
+        model=Lessons
+        fields=('title', 'season','section',)
+        widget={
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'season':forms.Select(attrs={'class': 'form-control'}),
+            'section': forms.Select(attrs={'class': 'form-control'}),
+        }
 
-    
-
-
+class EditSectionForm(forms.ModelForm):
+    class Meta:
+        model=Sections
+        fields=('title','teacher','students','max_student_count',)
+        widgets={
+            'title': forms.TextInput(attrs={'class':'form-control'}),
+            'teacher': forms.Select(attrs={'class':'form-select '}),
+            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
+            'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
+        }
+class AddSectionForm(forms.ModelForm):
+    class Meta:
+        model=Sections
+        fields=('title','teacher','students','max_student_count',)
+        widgets={
+            'title': forms.TextInput(attrs={'class':'form-control'}),
+            'teacher': forms.Select(attrs={'class':'form-select '}),
+            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
+            'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
+        }

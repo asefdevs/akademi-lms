@@ -23,10 +23,7 @@
 											<input type="text" class="form-control" name="search_query" value="{{ search_query|default:'' }}" placeholder='Search here'>
 										
 										
-											<select name="filter_option" class="btn" aria-label="Default">
-												<option value="oldest" {% if filter_option == 'oldest' %}selected{% endif %}>Oldest</option>
-												<option value="recent" {% if filter_option == 'recent' %}selected{% endif %}>Recent</option>
-											</select>
+										
 											<select name="filter_option_class" class="btn" aria-label="Default">
 												{% for class in class_list  %}
 												<option value="{{class.name}}" {% if filter_option_class == 'student.grade' %}selected{% endif %}>{{class.name}}</option>
@@ -70,7 +67,7 @@
                                                 <th >Students</th>
                                                 <th >Action</th>
                                             </tr>
-                                        </thead>
+                                        </thead>		
                                         <tbody>
                                             {% for class in class_list  %}
 
@@ -78,7 +75,7 @@
                                                 <td>{{class.id}}</td>
                                                 <td> {{class.name}}</td>
                                                 <td>{{class.created_at}}</td>
-                                                <td>{{class.students.all.count}} </td>
+                                                <td>{{class.student.all.count}} </td>
                                                 <td><span><a href="{% url 'edit-class' class.name %}" class="me-4" data-bs-toggle="tooltip"
                                                             data-placement="top" title="Edit"><i
                                                                 class="fa fa-pencil color-muted"></i> </a><a
@@ -102,10 +99,6 @@
 			</div>
 		</div>
 
-		
-        <!--**********************************
-            Content body end
-        ***********************************-->
 
         {% endblock %}
 

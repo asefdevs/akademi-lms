@@ -70,28 +70,15 @@
                 
                 <div class="row">
                   <div class="col-xl-6 col-sm-6">
-                    <div class="mb-3">
+                    <div class="mb-3 form-check">
                       <label for="exampleFormControlInput1" class="form-label text-primary">Classname<span class="required">*</span></label>
                       {{form.name}}
                       </div>
                     <div class="mb-3">
                       <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
-                      {{form.students}}
+                      {{form.student}}
                     </div>
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label text-primary">Lessons Name<span class="required">*</span></label>
-                      {{form.lessons}}
-                      </div>
-                   
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput3" class="form-label text-primary">Teachers<span class="required">*</span></label>
-                      {{form.teachers}}
-                    </div>
-                    <div class="mb-3">
-                      <label  class="form-label text-primary">Maxstudent<span class="required">*</span></label>
-                      {{form.maximum_student}}
-                    </div>
-                    
+
                   <div>
                     <hr>
 										{% if form.errors %}

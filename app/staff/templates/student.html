@@ -114,9 +114,14 @@
 													</div>
 												</td>
 												<td>
+													{% for class in classes  %}
+													{% if student in class.student.all %}
 													<div class="badge bg-primary">
-														{{ student.grade }}
+														{{class.name}}
 													</div>
+													{% endif %}
+
+													{% endfor %}
 												</td>
 												<td>
 													<div class="d-flex justify-content-between">

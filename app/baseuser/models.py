@@ -10,7 +10,7 @@ class User(AbstractUser):
         ('female', 'Female'),
     )
     gender = models.CharField(max_length=250, choices=gender_choice)
-    birthdate = models.DateField()
+    birthdate = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(default='profile_photos/default_pp.png', upload_to='profile_photos')
     user_type_names = (
         ('student', 'Student'),

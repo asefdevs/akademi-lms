@@ -95,9 +95,28 @@
 											{{form_user.number}}
 										</div>
 										<div class="col-sm-6 m-b30">
-											<label class="form-label">Grade</label>
-											{{form_student.grade}}
+											<label class="form-label">Current Season Lessons</label>
+											{{form_student.lesson}}
 										</div>
+										{% if form_student.errors or form_user.errors %}
+										<div class="alert alert-danger">
+										  <ul>
+											{% for field in form %}
+											  {% if field.errors %}
+												<li>
+												  <strong>{{ field.label }}</strong>: 
+												  {% for error in field.errors %}
+													{{ error }}
+													<br>
+												  {% endfor %}
+												</li>
+											  {% endif %}
+											{% endfor %}
+										  </ul>
+										</div>
+										{% endif %}
+
+									
 									</div>
 								</div>
 								<div class="card-footer">

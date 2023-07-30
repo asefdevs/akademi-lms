@@ -1,4 +1,5 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect,render
+
 
 def custom_login_required(view_func):
     def wrapper_func(request,*args, **kwargs):

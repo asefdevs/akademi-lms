@@ -1,7 +1,7 @@
 from . models import User
 from django import forms
-from staff.models import Staff,Lesson
-from core.models import ClassName
+from staff.models import Staff,Lessons
+from core.models import Classes
 
 
 
@@ -24,14 +24,13 @@ class RegisterForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Position'}),
         required=False
         )
-    grade = forms.ModelChoiceField(
-        queryset=ClassName.objects.all(),
+    classname = forms.ModelChoiceField(
+        queryset=Classes.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False
     )    
-    position_teacher = forms.ModelChoiceField(
-        queryset=Lesson.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'}),
+    position_teacher = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Position Teacher'}),
         required=False
     )
 

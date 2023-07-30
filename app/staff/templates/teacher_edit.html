@@ -103,6 +103,27 @@
 											<label class="form-label">About Teacher</label>
 											{{form_teacher.about_teacher}}
 										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">About Teacher</label>
+											{{form_teacher.position}}
+										</div>
+										{% if form_teacher.errors %}
+										<div class="alert alert-danger">
+										  <ul>
+											{% for field in form_teacher %}
+											  {% if field.errors %}
+												<li>
+												  <strong>{{ field.label }}</strong>: 
+												  {% for error in field.errors %}
+													{{ error }}
+													<br>
+												  {% endfor %}
+												</li>
+											  {% endif %}
+											{% endfor %}
+										  </ul>
+										</div>
+										{% endif %}
 									</div>
 								</div>
 								<div class="card-footer">

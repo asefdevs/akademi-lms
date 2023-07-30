@@ -12,7 +12,7 @@
       <div class="col-xl-12">
         <div class="card">
           <div class="card-header">
-            <h5 class="mb-0">Class Details</h5>
+            <h5 class="mb-0">Section Editing</h5>
           </div>
           <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
@@ -20,26 +20,37 @@
               <div class="row">
                 <div class="col-xl-12 col-lg-8">
                   <div class="row">
-                    <div class="col-xl-6 col-sm-6">
+                    <div class="col-xl-3 col-sm-6">
                       <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label text-primary">Classname<span
+                        <label for="exampleFormControlInput1" class="form-label text-primary">Section Title<span
                             class="required">*</span></label>
-                        {{form.name}}
+                        {{form.title}}
                       </div>
-                 
-                    </div>
-                    <div class="col-xl-6 col-sm-6">
                       <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span
+                        <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span
                             class="required">*</span></label>
-                        {{form.student}}
+                        {{form.teacher}}
                       </div>
-              
                     </div>
-                    <hr>
+                    <div class="col-xl-6 col-sm-6 form-check">
+                        <div class="mb-3">
+                            <label class="form-check-label text-primary">Students<span class="required">*</span></label><br>
+                            {% for student in form.students %}
+                                <div class="form-check">
+                                    {{ student }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label text-primary">Max Students<span
+                            class="required">*</span></label>
+                        {{form.max_student_count}}
+                         </div>
+                    </div>
+                <hr>
                     {% if form.errors %}
                     <div class="alert alert-danger">
-                      <ul>
+                        <ul>
                         {% for field in form %}
                         {% if field.errors %}
                         <li>
@@ -51,13 +62,13 @@
                         </li>
                         {% endif %}
                         {% endfor %}
-                      </ul>
-                    </div>
-                    {% endif %}
-                  </div>
-                  <button type="submit" class="btn btn-block btn-primary">Register</button>
+                    </ul>
                 </div>
-              </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-block btn-primary">Save</button>
             </form>
           </div>
         </div>
