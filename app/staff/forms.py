@@ -42,14 +42,13 @@ class EditStudentForm(forms.ModelForm):
         widgets = {
             'lesson': forms.CheckboxSelectMultiple(attrs={'class': 'form-checkbox', 'placeholder': 'Lesson'}),
         }
-    
+           
     def __init__(self,*args,**kwargs):
         super(EditStudentForm,self).__init__(*args, **kwargs)
         instance = kwargs.get('instance')
         print(instance)
         active_season=str(Settings.objects.last())
         print(active_season)
-
         lessons=Lessons.objects.filter(season__season_name=active_season)
         self.fields['lesson'].queryset=lessons
 

@@ -80,9 +80,7 @@ class EditClassForm(forms.ModelForm):
 
 
 class AddLessonForm(forms.ModelForm):
-    # section=forms.CharField(
-    #     widget=forms.TextInput(attrs={'class':'form-control'}),
-    # )
+
     class Meta:
         model=Lessons
         fields=('title', 'season','section',)
@@ -127,6 +125,6 @@ class AddSectionForm(forms.ModelForm):
         widgets={
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'teacher': forms.Select(attrs={'class':'form-select '}),
-            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
+            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-inline',}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }

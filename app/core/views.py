@@ -1,11 +1,12 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect
 from django.urls import reverse
 from baseuser.models import User
 from baseuser.decorators import custom_login_required,superadmin_required
 from core.forms import AddSectionForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm
 from. models import Classes,Notification
-from staff.models import Sections, Students
+from staff.models import Sections
+from django.forms import formset_factory
+
 
 # Create your views here.
 @custom_login_required
@@ -120,32 +121,30 @@ def edit_class(request,class_name):
     return render (request,'edit-class.html',context)
 
 def add_lesson(request):
-    form=AddLessonForm(request.POST)
-    context={
-        'form':form,
-        'page_title': 'Add Lesson',
-    }
-    
+    FormSet = formset_factory(AddSectionForm, extra=1)  
     if request.method == 'POST':
-        if form.is_valid():
-            lesson=form.save(commit=False)
-            section_title=form.cleaned_data['section']
-            lesson.save()
-            section=Sections.objects.filter(title=section_title).first()
-            if not section:
-                section=Sections.objects.create(title=section_title)
-                section.save()
-            else:
-                lesson.section.add(section)
-                lesson.save()
-            return redirect(reverse('edit-section', args=[section.pk]))
+        lesson_form = AddLessonForm(request.POST, prefix='lesson_form')
+        section_formset = FormSet(request.POST, prefix='section_form')
+
+        if lesson_form.is_valid() and section_formset.is_valid():
+            lesson= lesson_form.save()
+            for form in section_formset:
+                if form.has_changed():
+                    section=form.save()
+                    lesson.section.add(section)
+
+            return redirect('home') 
 
     else:
-        form=AddLessonForm()
-        context['form']=form
-       
+        lesson_form = AddLessonForm( prefix='lesson_form')
+        section_formset = FormSet(prefix='section_form')
+    context={
+        'page_title': 'Add Lesson',
+        'lesson_form': lesson_form,
+        'section_formset': section_formset,
+    }
 
-    return render(request, 'add_lesson.html',context)
+    return render(request, 'burabax.html', context)
 
 
 def edit_section(request, section_id):
