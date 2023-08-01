@@ -122,29 +122,34 @@ def edit_class(request,class_name):
 
 def add_lesson(request):
     FormSet = formset_factory(AddSectionForm, extra=1)  
+    
     if request.method == 'POST':
         lesson_form = AddLessonForm(request.POST, prefix='lesson_form')
         section_formset = FormSet(request.POST, prefix='section_form')
 
-        if lesson_form.is_valid() and section_formset.is_valid():
-            lesson= lesson_form.save()
+        if lesson_form.is_valid() and all(section_formset.is_valid()):
+            lesson = lesson_form.save()  # Save the lesson form to get the lesson instance
+
             for form in section_formset:
                 if form.has_changed():
-                    section=form.save()
-                    lesson.section.add(section)
+                    section = form.save()
+                    section.save()
+                    lesson.section.add(section)  # Associate the section with the lesson
 
             return redirect('home') 
 
     else:
         lesson_form = AddLessonForm( prefix='lesson_form')
         section_formset = FormSet(prefix='section_form')
+    
     context={
         'page_title': 'Add Lesson',
         'lesson_form': lesson_form,
         'section_formset': section_formset,
     }
 
-    return render(request, 'burabax.html', context)
+    return render(request, 'add_lesson.html', context)
+
 
 
 def edit_section(request, section_id):

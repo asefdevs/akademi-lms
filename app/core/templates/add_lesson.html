@@ -31,10 +31,6 @@
                                                 <label for="exampleFormControlInput1" class="form-label text-primary">Season<span class="required">*</span></label>
                                                 {{lesson_form.season}}
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label text-primary">Sections<span class="required">*</span></label>
-                                                {{lesson_form.section}}
-                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -52,8 +48,12 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
-                                            {{form.students}}
-                                        </div>
+                                            {% for student in form.students %}
+                                            <div class="form-check">
+                                                {{ student }}
+                                            </div>
+                                              {% endfor %}                                      
+                                      </div>
                                         <div class="mb-3">
                                             <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
                                             {{form.max_student_count}}
@@ -87,7 +87,31 @@
 <script>
     document.getElementById('add-section-btn').addEventListener('click', function() {
         const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
-        const newForm = '{{ section_formset.empty_form|escapejs }}'.replace(/__prefix__/g, formIdx);
+        const emptyFormTemplate = `
+                                <div class="section-form">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                        <input type="text" name="section_form-${formIdx}-title" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                        {{ section_formset.empty_form.teacher }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                        {% for student in section_formset.empty_form.students  %}
+                                        <div class="form-check">
+                                            {{ student }}
+                                        </div>
+                                          {% endfor %}     
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                        <input type="number" name="section_form-${formIdx}-max_student_count" class="form-control">
+                                    </div>
+                                </div>
+                            `;
+        const newForm = emptyFormTemplate.replace(/__prefix__/g, formIdx);
         document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;        
         const formWrapper = document.createElement('div');
         formWrapper.innerHTML = `<hr><br><h5>Section ${document.getElementById('id_section_form-TOTAL_FORMS').value}</h5>${newForm}<br><hr>`;

@@ -42,26 +42,24 @@
                                     <div id="section_formset">
                                         <h5> Section </h5>
                                         {% for form in section_formset %}
-                                            <div class="section-form">
-                                                <div class="mb-3">
-                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
-                                                    {{form.title}}
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
-                                                    {{form.teacher}}
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
-                                                    {{form.students}}
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
-                                                    {{form.max_student_count}}
-                                                </div>
-                                            </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                            {{form.title}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                            {{form.teacher}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                            {{form.students}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                            {{form.max_student_count}}
+                                        </div>
                                         {% endfor %}
-                                    </div>            
+                                    </div>                   
                                       <hr>
                                     {% if lesson_form.errors %}
                                     <div class="alert alert-danger">
@@ -87,29 +85,33 @@
     </div>
 </div>
 <script>
-    const emptyFormHTML = `{% filter escapejs %}{% for form in section_formset %} <div class="section-form"> <div class="mb-3"> <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label> {{form.title}} </div> <div class="mb-3"> <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label> {{form.teacher}} </div> <div class="mb-3"> <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label> {{form.students}} </div> <div class="mb-3"> <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label> {{form.max_student_count}} </div> </div> {% endfor %}{% endfilter %}`;
-
     document.getElementById('add-section-btn').addEventListener('click', function() {
         const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
-        const newForm = emptyFormHTML.replace(/__prefix__/g, formIdx);
-        document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;
-
-        // Create a new container div for the added section
-        const sectionContainer = document.createElement('div');
-        sectionContainer.classList.add('section-form');
-
-        // Add the new section form to the container
-        sectionContainer.innerHTML = `
-            <hr>
-            <br>
-            <h5>Section ${document.getElementById('id_section_form-TOTAL_FORMS').value}</h5>
-            ${newForm}
-            <br>
-            <hr>
-        `;
-
-        // Append the new section container to the formset
-        document.getElementById('section_formset').appendChild(sectionContainer);
+        const emptyFormTemplate = `
+                                <div class="section-form">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                        <input type="text" name="section_form-${formIdx}-title" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                        {{ section_formset.empty_form.teacher }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                        {{ section_formset.empty_form.students }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                        <input type="number" name="section_form-${formIdx}-max_student_count" class="form-control">
+                                    </div>
+                                </div>
+                            `;
+        const newForm = emptyFormTemplate.replace(/__prefix__/g, formIdx);
+        document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;        
+        const formWrapper = document.createElement('div');
+        formWrapper.innerHTML = `<hr><br><h5>Section ${document.getElementById('id_section_form-TOTAL_FORMS').value}</h5>${newForm}<br><hr>`;
+        document.getElementById('section_formset').appendChild(formWrapper);
     });
 </script>
 {% endblock %}

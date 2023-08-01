@@ -68,12 +68,9 @@ class EditClassForm(forms.ModelForm):
             else:
                 status = student.class_of_students.last()
                 student_of_other_classes.append((student.pk, f"{student} - {status}"))
-        print(student_of_classes)
         student_choices = list(chain(student_of_classes, student_of_other_classes))
-        print(student_choices)
 
 
-        # Update the 'student' field choices with the modified list
         self.fields['student'].choices = student_choices
         print(self.fields['student'].choices)
 
@@ -89,14 +86,20 @@ class AddLessonForm(forms.ModelForm):
             'season':forms.Select(attrs={'class':'form-control'}),
             'section':forms.SelectMultiple(attrs={'class':'form-select'}),
         }
-    # def clean_section(self):
-    #     section_title = self.cleaned_data['section']
-    #     section, created = Sections.objects.get_or_create(title=section_title)
-    #     return section
-    # def __init__(self,*args,**kwargs):
-    #     super(AddLessonForm,self).__init__(*args,**kwargs)
-    #     self.fields['section'].widget=forms.TextInput()
+    def __init__(self,*args,**kwargs):
+        super(AddLessonForm, self).__init__(*args,**kwargs)
+        self.fields['section'].widget=forms.MultipleHiddenInput()
 
+class AddSectionForm(forms.ModelForm):
+    class Meta:
+        model=Sections
+        fields=('title','teacher','students','max_student_count',)
+        widgets={
+            'title': forms.TextInput(attrs={'class':'form-control'}),
+            'teacher': forms.Select(attrs={'class':'form-select '}),
+            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid',}),
+            'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
+        }
 
 class EditLessonForm(forms.ModelForm):
     class Meta:
@@ -116,15 +119,5 @@ class EditSectionForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'teacher': forms.Select(attrs={'class':'form-select '}),
             'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
-            'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
-        }
-class AddSectionForm(forms.ModelForm):
-    class Meta:
-        model=Sections
-        fields=('title','teacher','students','max_student_count',)
-        widgets={
-            'title': forms.TextInput(attrs={'class':'form-control'}),
-            'teacher': forms.Select(attrs={'class':'form-select '}),
-            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-inline',}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }

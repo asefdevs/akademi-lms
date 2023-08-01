@@ -6,76 +6,142 @@
 {% include 'partials/sidebar.html' %}
 
 <!-- ... -->
-<div class="content-body">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Add Lesson Form</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" id="lesson-form">
-                            {% csrf_token %}
+
+                    <div class="content-body">
+                        <div class="container-fluid">
                             <div class="row">
-                                <div class="col-xl-12 col-lg-8">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label text-primary">Lesson Title<span class="required">*</span></label>
-                                                {{lesson_form.title}}
-                                            </div>
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Add Lesson Form</h5>
                                         </div>
-                                        <div class="col-xl-4 col-sm-6">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label text-primary">Season<span class="required">*</span></label>
-                                                {{lesson_form.season}}
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label text-primary">Sections<span class="required">*</span></label>
-                                                {{lesson_form.section}}
-                                            </div>
+                                        <div class="card-body">
+                                            <form method="POST" enctype="multipart/form-data" id="lesson-form">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-lg-8">
+                                                        <div class="row">
+                                                            <div class="col-xl-4 col-sm-6">
+                                                                <div class="mb-3">
+                                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Lesson Title<span class="required">*</span></label>
+                                                                    {{ lesson_form.title }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-4 col-sm-6">
+                                                                <div class="mb-3">
+                                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Season<span class="required">*</span></label>
+                                                                    {{ lesson_form.season }}
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="exampleFormControlInput1" class="form-label text-primary">Sections<span class="required">*</span></label>
+                                                                    {{ lesson_form.section }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        {{ section_formset.management_form }}
+                                                        <div id="section_formset">
+                                                            {% for form in section_formset %}
+                                                                <div class="section-form">
+                                                                    <div class="mb-3">
+                                                                        <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                                                        {{ form.title }}
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                                                        {{ form.teacher }}
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                                                        {{ form.students }}
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                                                        {{ form.max_student_count }}
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                            
+                                                        <hr>
+                                                        {% if lesson_form.errors %}
+                                                        <div class="alert alert-danger">
+                                                            <ul>
+                                                                {% for field in lesson_form %}
+                                                                {% for error in field.errors %}
+                                                                <li>{{ error }}</li>
+                                                                {% endfor %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-block btn-primary" id="add-section-btn">+ Add Section</button>
+                                                <button type="submit" class="btn btn-block btn-primary">Save</button>
+                                            </form>
                                         </div>
                                     </div>
-                                    <hr>
-                                    {{ section_forms.management_form }}
-                                    <div id="section-forms-container">
-                                        {% for form in section_forms %}
-                                            {{ form.as_p }}
-                                        {% endfor %}
-                                    </div>                   
-                                      <hr>
-                                    {% if lesson_form.errors %}
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            {% for field in lesson_form %}
-                                            {% for error in field.errors %}
-                                            <li>{{ error }}</li>
-                                            {% endfor %}
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                    {% endif %}
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-block btn-primary" id="add-section-btn">+ Add Section</button>
-                            <button type="submit" class="btn btn-block btn-primary">Save</button>
-                        </form>
-                        <script>
-                            let formIdx = {{ section_forms.total_form_count }}; // Get the current number of forms from Django
-                        
-                            document.getElementById('add-section-btn').addEventListener('click', function() {
-                                const formPrefix = 'form-' + formIdx + '-'; // Correct form prefix
-                                const newForm = '{{ section_forms.empty_form|escapejs }}'.replace(/__prefix__/g, formPrefix);
-                                document.getElementById('id_form2-TOTAL_FORMS').value = parseInt(formIdx) + 1;
-                                document.getElementById('section-forms-container').insertAdjacentHTML('beforeend', newForm);
-                                formIdx++; // Increment the form index
-                            });
-                        </script>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+ 
+
+                    <script>
+                        function cloneForm(formIdx) {
+                            const formsetDiv = document.getElementById('section_formset');
+                        
+                            // Define the template using a template literal
+                            const emptyFormTemplate = `
+                                        <h5>Section ${formIdx}</h5>
+
+                                <div class="section-form">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                        <input type="text" name="section_form-${formIdx}-title" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                        {{ section_formset.empty_form.teacher }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                        {{ section_formset.empty_form.students }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                        <input type="number" name="section_form-${formIdx}-max_student_count" class="form-control">
+                                    </div>
+                                </div>
+                            `;
+                        
+                            // Use the template literal directly without the need for getElementById
+                            const updatedForm = emptyFormTemplate.replaceAll('__prefix__', formIdx);
+                        
+                            // Create a new form element
+                            const newForm = document.createElement('div');
+                            newForm.innerHTML = updatedForm;
+                        
+                            formsetDiv.appendChild(newForm);
+                        
+                            // Increment the total form count
+                            document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;
+                        }
+                        
+                        // Use event delegation for the "Add Section" button clicks
+                        document.addEventListener('click', function(event) {
+                            if (event.target && event.target.id === 'add-section-btn') {
+                                const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
+                                cloneForm(formIdx);
+                            }
+                        });
+                        
+                        // Call cloneForm on DOMContentLoaded to add the initial form
+                        document.addEventListener('DOMContentLoaded', function() {
+                            cloneForm(0);
+                        });
+                        
+                    </script>
+                    
 {% endblock %}
