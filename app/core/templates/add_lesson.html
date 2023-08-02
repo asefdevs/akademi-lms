@@ -53,8 +53,9 @@
                                     {% endif %}
                                     {{ section_formset.management_form }}
                                     <div id="section_formset">
-                                        <h5> Section </h5>
+                                        <div>
                                     {% for form in section_formset %}
+                                    <h5> Section {{forloop.counter}}  </h5>
                                         <div class="mb-3">
                                             <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
                                             {{form.title}}
@@ -67,14 +68,15 @@
                                             <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
                                             {% for student in form.students %}
                                             <div class="form-check">
-                                                {{ student }}
-                                            </div>
+                                                {{ student }} {{student.user.last_name }}
+                                            </div>  
                                               {% endfor %}                                      
                                       </div>
                                         <div class="mb-3">
                                             <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
                                             {{form.max_student_count}}
                                         </div>
+
                                                                 {% if section_formset.errors %}
                                                                     {% if form.errors %}
                                                                         <div class="alert alert-danger">
@@ -94,18 +96,19 @@
                                                                         </div>
                                                                     {% endif %}
                                                             {% endif %}    
-                                                            {% if  form.is_bound and not form.errors %}
-                                                                    <div class="alert alert-danger"><strong>Please fill in all the required fields of Section.<strong> </div>
+                                                            {% if request.method == 'POST' and not form.has_changed and not form.errors %}
+                                                                    <div class="alert alert-danger"><strong>Please fill at least one form of Section.</strong> </div>
                                                             {% endif %}
-
-                                                              <hr>
+                                                            
                                     {% endfor %}
+                                         </div>
                                     </div>     
                                   
 
                                 </div>
                             </div>
                             <button type="button" class="btn btn-block btn-primary" id="add-section-btn">+ Add Section</button>
+                             <hr>
                             <button type="submit" class="btn btn-block btn-primary">Save</button>
                         </form>
                     
@@ -119,10 +122,10 @@
     document.getElementById('add-section-btn').addEventListener('click', function() {
         const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
         const emptyFormTemplate = `
-                                <div class="section-form">
-                                    <div class="mb-3">
+                                    <<h5> Season ${parseInt(formIdx) + 1}</h5> 
+                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
-                                        <input type="text" name="section_form-${formIdx}-title" class="form-control">
+                                        {{ section_formset.empty_form.title }}
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
@@ -140,43 +143,14 @@
                                         <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
                                         <input type="number" name="section_form-${formIdx}-max_student_count" class="form-control">
                                     </div>
-                                </div>
                             `;
-        const newForm = emptyFormTemplate.replace(/__prefix__/g, formIdx);
-        document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;        
-        const formWrapper = document.createElement('div');
-        formWrapper.innerHTML = `<hr><br><h5>Section ${document.getElementById('id_section_form-TOTAL_FORMS').value}</h5>${newForm}<br><hr>`;
-        document.getElementById('section_formset').appendChild(formWrapper);
+                            const newForm = emptyFormTemplate.replace(/__prefix__/g, formIdx);
+                            document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;        
+                            const formWrapper = document.createElement('div');
+                            formWrapper.innerHTML = `${newForm}`;
+                            document.getElementById('section_formset').appendChild(formWrapper);
     });
 </script>
+
 {% endblock %}
 
-
-{% comment %} {% if section_formset.errors %}
-{% for form in section_formset %}
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for field in form %}
-                    {% if field.errors %}
-                        <li>
-                            <strong>{{ field.label }}</strong>:
-                            {% for error in field.errors %}
-                                {{ error }}
-                                <br>
-                            {% endfor %}
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-{% endfor %}
-{% endif %}    
-{%  for form in section_formset.forms  %}
-{% if  form.is_bound and not form.errors %}
-<div class="alert alert-danger"><strong>Please fill in all the required fields of Section.<strong> </div>
-{% endif %}
-{% endfor %} 
-
-<hr> {% endcomment %}

@@ -121,55 +121,28 @@ def edit_class(request,class_name):
     }
     return render (request,'edit-class.html',context)
 
-# def add_lesson(request):
-#     FormSet = formset_factory(AddSectionForm, extra=1)  
-#     if request.method == 'POST':
-#         lesson_form = AddLessonForm(request.POST, prefix='lesson_form')
-#         section_formset = FormSet(request.POST, prefix='section_form') 
-#         if lesson_form.is_valid() and any(form.has_changed() for form in section_formset) and all(form.is_valid() for form in section_formset):
-#             print('valdleri zad kecdin')
-#             lesson = lesson_form.save()
-#             for form in section_formset:
-#                 if form.has_changed():
-#                     section = form.save()
-#                     lesson.section.add(section)
-
-#             return redirect('classes') 
-
-#     else:
-#         lesson_form = AddLessonForm(prefix='lesson_form')
-#         section_formset = FormSet(prefix='section_form')
-
-#     context = {
-#         'page_title': 'Add Lesson',
-#         'lesson_form': lesson_form,
-#         'section_formset': section_formset
-#     }
-
-#     return render(request, 'add_lesson.html', context)
 def add_lesson(request):
     FormSet = formset_factory(AddSectionForm, extra=1)  
     if request.method == 'POST':
         lesson_form = AddLessonForm(request.POST, prefix='lesson_form')
         section_formset = FormSet(request.POST, prefix='section_form')
-        empty_forms = [form for form in section_formset.forms if form.is_bound ]
-        if lesson_form.is_valid() and not empty_forms:
+        if lesson_form.is_valid() and any(form.has_changed() for form in section_formset) and all(form.is_valid() for form in section_formset):
             lesson = lesson_form.save()
             for form in section_formset:
-                if form.has_changed() :
+                if form.has_changed():
                     section = form.save()
                     lesson.section.add(section)
-
             return redirect('classes')
+
     else:
         lesson_form = AddLessonForm(prefix='lesson_form')
         section_formset = FormSet(prefix='section_form')
 
     context = {
-        'page_title': 'Add Lesson',
-        'lesson_form': lesson_form,
-        'section_formset': section_formset
-    }
+            'page_title': 'Add Lesson',
+            'lesson_form': lesson_form,
+            'section_formset': section_formset
+        }
 
     return render(request, 'add_lesson.html', context)
 

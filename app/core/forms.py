@@ -88,6 +88,14 @@ class AddLessonForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super(AddLessonForm, self).__init__(*args,**kwargs)
         self.fields['section'].widget=forms.MultipleHiddenInput()
+    def clean(self) :
+        cleaned_data= super().clean()
+        return cleaned_data
+    def clean_title(self):
+        title= self.cleaned_data.get('title')
+        if Lessons.objects.filter(title=title).exists():
+            self.add_error('title','Lesson title already exists')
+        return title
 
 class AddSectionForm(forms.ModelForm):
     class Meta:
@@ -96,9 +104,14 @@ class AddSectionForm(forms.ModelForm):
         widgets={
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'teacher': forms.Select(attrs={'class':'form-select '}),
-            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid',}),
+            'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox',}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }
+    # def __init__(self,*args,**kwargs):
+    #     super(AddSectionForm, self).__init__(*args,**kwargs)
+    #     all_students=Students.objects.all()
+    #     for student in self.fields['students']:
+    #         print('+++++++')
 
 
 
