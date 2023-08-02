@@ -77,7 +77,6 @@ class EditClassForm(forms.ModelForm):
 
 
 class AddLessonForm(forms.ModelForm):
-
     class Meta:
         model=Lessons
         fields=('title', 'season','section',)
@@ -100,6 +99,8 @@ class AddSectionForm(forms.ModelForm):
             'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid',}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }
+
+
 
 class EditLessonForm(forms.ModelForm):
     class Meta:

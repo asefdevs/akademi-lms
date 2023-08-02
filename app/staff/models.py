@@ -23,7 +23,7 @@ class Lessons(models.Model):
 class Sections(models.Model):
     title=models.CharField(max_length=50)
     teacher=models.ForeignKey('Teachers', on_delete=models.SET_NULL,related_name='teacher_of_seasonLesson',null=True)
-    students=models.ManyToManyField('Students', related_name='students_of_section')
+    students=models.ManyToManyField('Students', related_name='students_of_section',blank=False)
     max_student_count=models.IntegerField()
     def __str__(self):
         return self.title
