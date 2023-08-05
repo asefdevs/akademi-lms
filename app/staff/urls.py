@@ -13,7 +13,7 @@ urlpatterns = [
     path('teacher_edit/<int:teacher_id>/',views.teacher_edit,name='teacher_edit'),
     path('delete-teacher/', views.delete_teacher, name='delete_teacher'),
     path('staff/',views.staff_list,name='staff'),  
-    path('test_detail/<int:student_id>/',views.test_detail,name='test-detail'),  
+    # path('test_detail/<int:student_id>/',views.student_edit,name='test-detail'),  
 
 
     path('error_404/',views.error_404,name='error_permission'),

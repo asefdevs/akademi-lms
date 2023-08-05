@@ -122,7 +122,7 @@
     document.getElementById('add-section-btn').addEventListener('click', function() {
         const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
         const emptyFormTemplate = `
-                                    <<h5> Season ${parseInt(formIdx) + 1}</h5> 
+                                    <<h5> Section ${parseInt(formIdx) + 1}</h5> 
                                      <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
                                         {{ section_formset.empty_form.title }}

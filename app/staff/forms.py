@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserChangeForm
 from django.forms.widgets import ClearableFileInput
 from ckeditor.widgets import CKEditorWidget
 from core.models import Classes,Settings
+from staff.models import Sections
+from django.db.models import Q
 
 
 
@@ -36,21 +38,28 @@ class EditUserForm(UserChangeForm):
         }
 
 class EditStudentForm(forms.ModelForm):
+    section = forms.ModelChoiceField(
+        queryset=Sections.objects.all(),
+        widget=forms.Select(attrs={'placeholder': 'Section','class': 'form-control form-control-sm'}),
+        required=False
+    )
     class Meta:
         model = Students
         fields = ('lesson',)
         widgets = {
-            'lesson': forms.CheckboxSelectMultiple(attrs={'class': 'form-checkbox', 'placeholder': 'Lesson'}),
+            'lesson': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input',}),
         }
            
     def __init__(self,*args,**kwargs):
         super(EditStudentForm,self).__init__(*args, **kwargs)
-        instance = kwargs.get('instance')
-        print(instance)
         active_season=str(Settings.objects.last())
-        print(active_season)
         lessons=Lessons.objects.filter(season__season_name=active_season)
         self.fields['lesson'].queryset=lessons
+        selected_lessons = self.instance.lesson.all()
+        sections = Sections.objects.filter(section_of_lesson__in=selected_lessons)
+        self.fields['section'].queryset = sections
+
+
 
 
 class EditTeacherForm(forms.ModelForm):

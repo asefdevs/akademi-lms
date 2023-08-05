@@ -1,4 +1,5 @@
 from django.shortcuts import  render, redirect
+from django.urls import reverse
 from baseuser.models import User
 from baseuser.decorators import student_required,teacher_required,superadmin_required,custom_login_required
 from staff.models import Lessons, Staff, Students,Teachers,Sections
@@ -105,18 +106,19 @@ def student_edit(request,student_id):
         form_student=EditStudentForm(request.POST, instance=student)
         if form_user.is_valid() and form_student.is_valid():
             form_user.save()
-            form_student.save()
+            student_form=form_student.save()
+            lessons=student_form.lesson.all()
             if 'profile_photo' in request.FILES:
                  user.profile_photo = request.FILES['profile_photo']
                  user.save()
-            return redirect('students')  
+            return redirect(reverse('edit_student',args=[student.pk]))  
         else:
             {form_student: form_student}
             {form_user: form_user}
     else:
         form_user = EditUserForm(instance=user)
         form_student=EditStudentForm(instance=student)
-    return render(request, 'edit-student.html', {'form_user': form_user,'form_student':form_student ,'student': student})
+    return render(request, 'test_detail.html', {'form_user': form_user,'form_student':form_student ,'student': student})
 
 @custom_login_required
 @superadmin_required
@@ -139,9 +141,7 @@ def teacher_edit(request,teacher_id):
                 'form_user' : form_user
                       }
             print(form_user.errors)
-            print(form_teacher.errors)
-        
-            
+            print(form_teacher.errors)                   
     else:
         form_user = EditUserForm(instance=user)
         form_teacher=EditTeacherForm(instance=teacher)

@@ -1,53 +1,170 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Students Data</title>
-</head>
-<body>
-    <h1> Student {{student.user.first_name}}'s Data</h1>
-    <h2>Active Season : {{active_season}}</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Season Name</th>
-                <th>Section</th>
-                <th>Teacher</th>
-                <th>Lesson</th>
-            </tr>
-        </thead>
-        {% for data in student_data_active %}   
-        <tbody>
-            <tr>
-                     <td>{{ data.season_name }}</td>
+{% extends 'base_staff.html' %}
+{% load static %}
+{% block content  %}
 
-                    <td>{{ data.section }}</td>
-                    <td>{{ data.teacher }}</td>
-                    <td>{{ data.lesson }}</td>
-                </tr>
-            </tbody>
-        {% endfor %}
-    </table>
+ 		{% include 'partials/navheader-preloader.html' %}
+		{% include 'partials/header.html' %}
+		
+		{% include 'partials/sidebar.html' %}
+		<!--**********************************
+            Content body start
+			***********************************-->
+			<div class="content-body">
+				<div class="container-fluid">
+					<!-- row -->
+					<div class="row">
+						<div class="col-xl-3 col-lg-4">
+							<div class="clearfix">
+								<div class="card card-bx profile-card author-profile m-b30">
+									<div class="card-body">
+									<form class="profile-form" method='POST' enctype="multipart/form-data" >
+										{% csrf_token %}
+									<div class="p-5">
+										<div class="author-profile">
+											
+											<div class="author-info">
+												<h6 class="title">{{student.user.first_name}}</h6>
+												<span>Student</span>
+											</div>
+											<div class="author-media ">
+												<img src="{{ form_user.instance.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+												<label for="{{ form_user.profile_photo.id_for_label }}" class="update-file">
+													<input type="file" id="{{ form_user.profile_photo.id_for_label }}" name="{{ form_user.profile_photo.name }}" style="display: none;">
+													<a class="fa fa-camera mt-3" style="font-size: 15px;" >  Change photo</a></input>
+												</label>											
+											</div>
+										</div>
 
-    <h2>Past Seasons</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Season Name</th>
-                <th>Section</th>
-                <th>Teacher</th>
-                <th>Lesson</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in student_data_past %}
-                <tr>
-                    <td>{{ data.season_name }}</td>
-                    <td>{{ data.section }}</td>
-                    <td>{{ data.teacher }}</td>
-                    <td>{{ data.lesson }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+									</div>
+									<div class="info-list">
+										<ul>
+											<li><a href="app-profile.html">Grade</a>
+												<span>
+												{{ student.grade}}
+												</span>
+											</li>
+											<li><a href="app-profile.html">Lessons</a>
+												<span>
+												{{ student.lessons.count}}
+												</span>
+											</li>
+										</ul>
+									</div>
+								</div>								
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-9 col-lg-8">
+						<div class="card profile-card card-bx">
+							<div class="card-header">
+								<h6 class="title">Account setup</h6>
+							</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Username</label>
+											{{ form_user.username }}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">First Name</label>
+											{{ form_user.first_name }}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Surname</label>
+											{{form_user.last_name}}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Email</label>
+											{{form_user.email}}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Gender</label>
+											{{form_user.gender}}
+
+										</div>	
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Birth</label>
+											{{form_user.birthdate}}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Country</label>
+											{{form_user.country}}
+										</div>
+										<div class="col-sm-6 m-b30">
+											<label class="form-label">Phone</label>
+											{{form_user.number}}
+										</div>
+                                        <div class="row">
+                                            {% for lesson in form_student.lesson %}
+                                            <div class="col-sm-4 m-b30">
+                                                <div class="lesson-section">
+                                                    <label class="form-label" style="font-size: 40px !important; font-weight: bold;">{{ lesson.title }}</label>
+                                                    {{ lesson }}
+                                                    <div id="sections_{{ lesson.pk }}" class="sections" style="display: none;">
+                                                        {{ form_student.section }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                        
+										{% if form_student.errors or form_user.errors %}
+										<div class="alert alert-danger">
+										  <ul>
+											{% for field in form %}
+											  {% if field.errors %}
+												<li>
+												  <strong>{{ field.label }}</strong>: 
+												  {% for error in field.errors %}
+													{{ error }}
+													<br>
+												  {% endfor %}
+												</li>
+											  {% endif %}
+											{% endfor %}
+										  </ul>
+										</div>
+										{% endif %}
+
+									
+									</div>
+								</div>
+								<div class="card-footer">
+									<button type='submit' class="btn btn-primary">UPDATEeeee</button>								
+                                	</div>
+							</form>
+						</div>
+					</div>
+				</div>	
+            </div>
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const lessonCheckboxes = document.querySelectorAll("[name='lesson']");
+    
+            function updateSectionVisibility() {
+                lessonCheckboxes.forEach(function (checkbox) {
+                    const lessonID = checkbox.value;
+                    const sectionsDiv = checkbox.closest(".lesson-section").querySelector(".sections");
+                    if (sectionsDiv) {
+                        sectionsDiv.style.display = checkbox.checked ? "block" : "none";
+                    }
+                });
+            }
+    
+            lessonCheckboxes.forEach(function (checkbox) {
+                checkbox.addEventListener("change", updateSectionVisibility);
+            });
+    
+            // Call the function once on page load to set the initial visibility
+            updateSectionVisibility();
+        });
+    </script>
+    
+    
+  {% endblock %}

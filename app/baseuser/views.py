@@ -55,7 +55,6 @@ def register_student(request):
             user.save()
             if user.user_type == 'student':
                 student=Students.objects.create(user=user)
-                # student.grade=grade
                 student.save()
                 classname=form.cleaned_data['classname']
                 class_info=Classes.objects.get(name=classname)

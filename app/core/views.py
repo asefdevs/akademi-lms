@@ -5,7 +5,7 @@ from baseuser.models import User
 from baseuser.decorators import custom_login_required,superadmin_required
 from core.forms import AddSectionForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm
 from. models import Classes,Notification
-from staff.models import Sections
+from staff.models import Lessons, Sections,Students,Teachers
 from django.forms import formset_factory
 
 
@@ -17,7 +17,10 @@ def home(request):
     context={
         'user_details': User.objects.all(),
         'page_title':'Home',
-        'notifications': notifications
+        'notifications': notifications,
+        'students': Students.objects.all().count(),
+        'teachers':Teachers.objects.all().count(),
+        
     }
     return render(request,'index.html',context)
 
@@ -59,13 +62,11 @@ def add_class(request):
             if students:
                  for student in students:
                     added_student = student.user
-                    print(added_student)
                     user=User.objects.get(username=added_student)
                     message=f'You are added to {created_class.name}'
                     notification=Notification.objects.create(message=message,user=user)
                     notification.save()
-                    print(notification)
-                    
+                    print(notification)          
             return redirect('classes')
         else:
             context['form']=form    
@@ -128,10 +129,22 @@ def add_lesson(request):
         section_formset = FormSet(request.POST, prefix='section_form')
         if lesson_form.is_valid() and any(form.has_changed() for form in section_formset) and all(form.is_valid() for form in section_formset):
             lesson = lesson_form.save()
+            season_name = lesson_form.cleaned_data.get('season')
+            lesson_title = lesson_form.cleaned_data.get('title')
+            new_title = f'{lesson_title}-{season_name}'
+            lesson.title = new_title
+            lesson.save()
             for form in section_formset:
                 if form.has_changed():
                     section = form.save()
+                    section_title=form.cleaned_data.get('title')
+                    new_section_title=f'{lesson_title} - {section_title}'
+                    section.title=new_section_title
                     lesson.section.add(section)
+                    section.save()
+                    title= form.cleaned_data.get('max_student_count')
+                    students=form.cleaned_data.get('students')
+                    count_of_students=students.count()
             return redirect('classes')
 
     else:
@@ -160,7 +173,6 @@ def edit_section(request, section_id):
             return redirect(reverse('edit-section',args=[section_id]))
         else:
             context['form']=form
-            print(form.errors)
     else:
         form=EditSectionForm(instance=section_data)
         context['form']=form
@@ -178,3 +190,31 @@ def add_section_view(request):
         form = AddSectionForm()
 
     return render(request, 'add_section.html', {'form': form})
+
+
+def lesson_list(request):
+    context={
+        'lessons':Lessons.objects.all()
+    }
+    return render(request,'lesson_list.html',context)
+
+def lesson_detail(request,lesson_id):
+    lesson=Lessons.objects.get(id=lesson_id)
+    section=lesson.section.all()
+    print(section)
+    students=Students.objects.filter(students_of_section__in=section)
+    print(students)
+        
+  
+    search_query=request.GET.get('search_query')
+    filter_option=request.GET.get('filter_option_section')
+    if search_query:
+        students=students.filter(user__first_name__icontains=search_query)
+        print(students)
+    context={
+        'lesson':lesson,
+        'section':section,
+        'students':students,
+        'page_title': 'Lesson Details'
+    }
+    return render(request,'lesson_detail.html',context)

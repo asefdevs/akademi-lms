@@ -107,12 +107,17 @@ class AddSectionForm(forms.ModelForm):
             'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox',}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }
-    # def __init__(self,*args,**kwargs):
-    #     super(AddSectionForm, self).__init__(*args,**kwargs)
-    #     all_students=Students.objects.all()
-    #     for student in self.fields['students']:
-    #         print('+++++++')
 
+    def clean(self) :
+        cleaned_data= super().clean()
+        return cleaned_data
+    def clean_max_student_count(self):
+        max= self.cleaned_data.get('max_student_count')
+        students=self.cleaned_data.get('students')
+        count_of_students=students.count()
+        if int(count_of_students) > int(max):
+            self.add_error('max_student_count','Exceeded max student count')
+        return max
 
 
 class EditLessonForm(forms.ModelForm):
