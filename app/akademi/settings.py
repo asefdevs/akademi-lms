@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'core',
     'staff',
     'ckeditor',
-    'formtools',
+
 
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

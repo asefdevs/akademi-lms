@@ -1,7 +1,8 @@
-from typing import Any, Dict
+from datetime import timezone
 from django import forms
-from . models import Classes,Seasons
+from . models import Classes,Assignment, StudentsAssignment
 from staff.models import Students,Sections,Lessons
+from ckeditor.widgets import CKEditorWidget
 
 
 
@@ -140,3 +141,50 @@ class EditSectionForm(forms.ModelForm):
             'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }
+
+class CreateAssignmentForm(forms.ModelForm):
+    receiver = forms.ModelMultipleChoiceField(
+        queryset=Sections.objects.all(),
+        widget=forms.SelectMultiple(attrs={'placeholder': 'Section','class': 'form-control',}),
+        required=False
+    )
+    class Meta:
+        model = Assignment
+        fields = ('title','max_try','deadline','description','lesson','receiver','sender',) 
+        widgets={
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'max_try':forms.NumberInput(attrs={'class':'form-control'}),
+            'deadline':forms.DateTimeInput(attrs={'class':'form-control',}),
+            'description':CKEditorWidget(),
+            'lesson':forms.Select(attrs={'placeholder':'User Type','class':'form-control'}),
+            
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateAssignmentForm, self).__init__(*args, **kwargs)
+
+        lesson_initial = self.initial.get('lesson')
+        if lesson_initial:
+            self.fields['receiver'].queryset = Sections.objects.filter(section_of_lesson=lesson_initial)
+        else:
+            self.fields['receiver'].queryset = Sections.objects.all()
+
+        self.fields['sender'].widget = forms.HiddenInput()
+        self.fields['lesson'].widget = forms.HiddenInput()
+
+
+class StudentAssigmentForm(forms.ModelForm):
+
+    class Meta:
+        model = StudentsAssignment
+        fields = '__all__' 
+       
+
+    def __init__(self, *args, **kwargs):
+        super(StudentAssigmentForm, self).__init__(*args, **kwargs)
+        self.fields['assignment'].widget = forms.HiddenInput()
+
+
+
+
+    

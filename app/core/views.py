@@ -1,10 +1,10 @@
 from django import forms
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
 from baseuser.models import User
 from baseuser.decorators import custom_login_required,superadmin_required
-from core.forms import AddSectionForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm
-from. models import Classes,Notification
+from core.forms import AddSectionForm, CreateAssignmentForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm, StudentAssigmentForm
+from. models import Classes,Notification,Assignment, StudentsAssignment
 from staff.models import Lessons, Sections,Students,Teachers
 from django.forms import formset_factory
 
@@ -185,7 +185,7 @@ def add_section_view(request):
         form = AddSectionForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('add_section')  # Yeni form eklenmiş sayfaya yönlendirme
+            return redirect('add_section')  
     else:
         form = AddSectionForm()
 
@@ -201,20 +201,56 @@ def lesson_list(request):
 def lesson_detail(request,lesson_id):
     lesson=Lessons.objects.get(id=lesson_id)
     section=lesson.section.all()
-    print(section)
     students=Students.objects.filter(students_of_section__in=section)
-    print(students)
+    initial_data={
+        'lesson':lesson,
+        'sender':request.user
+    }
+    if request.method == 'POST':
+        form = CreateAssignmentForm(request.POST)
+        if form.is_valid():
+            receiver_data=list(form.cleaned_data['receiver'])
+            form.save()
+            for title in receiver_data:
+                section_data=Sections.objects.filter(title=title)
+                for section in section_data:
+                    students_of_section=section.students.all()
+                    for student in students_of_section:
+                        user=User.objects.get(username=student)
+                        notification=Notification.objects.create(user=user,message=f'New Assigment for {lesson} ')
+                        notification.save()
+            return redirect(reverse('lesson-detail',args=[lesson_id]))
+    else:
+        form = CreateAssignmentForm(initial=initial_data)
         
   
     search_query=request.GET.get('search_query')
-    filter_option=request.GET.get('filter_option_section')
     if search_query:
         students=students.filter(user__first_name__icontains=search_query)
-        print(students)
+      
+
     context={
         'lesson':lesson,
         'section':section,
         'students':students,
-        'page_title': 'Lesson Details'
+        'page_title': 'Lesson Details',
+        'assignment_form': form,
+        'assignments': Assignment.objects.filter(lesson=lesson)
     }
     return render(request,'lesson_detail.html',context)
+
+def assignment_detail(request, id):
+    assignment = Assignment.objects.get(pk=id)
+    if request.method == 'POST':
+        form=StudentAssigmentForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form=StudentAssigmentForm(initial={'assignment':assignment})
+    
+    context={
+        'assignment': assignment,
+        'form': form
+        }
+
+    return render(request, 'assignment_detail.html',context)

@@ -147,7 +147,43 @@
 														</tbody>
 													{% endfor %}
 												</table>
+												
 											</div>	
+											<h3 class="heading">My Assigments</h3>
+											<div class="table-responsive">
+												<table class="table table-bordered table-responsive-sm">
+													<thead class="thead-primary">
+														<tr>
+															<th>Lesson</th>
+															<th>Title</th>
+															<th>Deadline</th>
+														
+															<th>Status</th>
+														</tr>
+													</thead>
+													{% for data in student_data_active %}
+													{% for assigment in data.assignment.all  %}
+													<tbody>
+														<tr>
+															<td>{{ assigment.lesson}}</td>
+															<td>{{ assigment.title}}</td>
+															<td>{{ assigment.deadline }}</td>
+														
+															{% if not assigment.is_active %}
+															<td><span class="badge badge-danger">Deactive</span></td>
+															{% else %}
+															<td><span class="badge badge-success">Active</span></td>
+															{% endif %}
+														</tr>
+													</tbody>
+													{% endfor %}
+													{% endfor %}
+												</table>
+											</div>
+											
+
+
+
 										</div>
 								</div>
 							</div>

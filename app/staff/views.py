@@ -154,12 +154,11 @@ def teacher_edit(request,teacher_id):
     return render(request, 'teacher_edit.html', context)  
 
 #detail Views
-
+from core.models import Assignment
 @custom_login_required
 @student_required
 def student_detail(request,student_id):
     student=Students.objects.get(user_id=student_id)
-    print(student)
     active_season = str(Settings.objects.first().active_season)
     all_seasons = Seasons.objects.all()
     student_data_active = []
@@ -174,13 +173,15 @@ def student_detail(request,student_id):
                 data['section'] = section.title
                 data['teacher'] = section.teacher
                 data['lesson']=lesson.title
+                assigment=Assignment.objects.filter(receiver=section)
+                if assigment.exists():
+                    data['assignment'] = Assignment.objects.filter(receiver=section)
                 if season.season_name == active_season:
                     data['is_active'] = True
                     student_data_active.append(data)
                 else:
                     data['is_active'] = False
                     student_data_past.append(data)
-
     context={
             'page_title': 'Student details',
             'student': student,

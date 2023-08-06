@@ -1,0 +1,99 @@
+{% extends 'base_core.html' %}
+{% load static %}
+{% block content %}
+{% include 'partials/navheader-preloader.html' %}
+{% include 'partials/header.html' %}
+{% include 'partials/sidebar.html' %}
+
+<!-- ... -->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Add Lesson Form</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data" id="lesson-form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-8">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label text-primary">Lesson Title<span class="required">*</span></label>
+                                                {{lesson_form.title}}
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label text-primary">Season<span class="required">*</span></label>
+                                                {{lesson_form.season}}
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label text-primary">Sections<span class="required">*</span></label>
+                                                {{lesson_form.section}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {{ section_formset.management_form }}
+                                    <div id="section_formset">
+                                        <h5> Section </h5>
+                                        {% for form in section_formset %}
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Title<span class="required">*</span></label>
+                                            {{form.title}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Teacher<span class="required">*</span></label>
+                                            {{form.teacher}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
+                                            {{form.students}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label text-primary">Max Student Count<span class="required">*</span></label>
+                                            {{form.max_student_count}}
+                                        </div>
+                                        {% endfor %}
+                                    </div>                   
+                                      <hr>
+                                    {% if lesson_form.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for field in lesson_form %}
+                                            {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-block btn-primary" id="add-section-btn">+ Add Section</button>
+                            <button type="submit" class="btn btn-block btn-primary">Save</button>
+                        </form>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Script to handle the "Add Form" button for form_2
+    document.getElementById('add-section-btn').addEventListener('click', function() {
+        const formIdx = document.getElementById('id_section_form-TOTAL_FORMS').value;
+        const newForm = '{{ section_formset.empty_form|escapejs }}'.replace(/__prefix__/g, formIdx);
+        document.getElementById('id_section_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;        
+        const formWrapper = document.createElement('div');
+        formWrapper.innerHTML = `<hr><br> <h5> Section ${document.getElementById('id_section_form-TOTAL_FORMS').value}</h5>${newForm}<br><hr>`;
+        document.getElementById('section_formset').appendChild(formWrapper);
+    });
+</script>
+{% endblock %}
+
