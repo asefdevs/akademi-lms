@@ -1,0 +1,93 @@
+{% extends 'base_core.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/navheader-preloader.html' %}
+{% include 'partials/header.html' %}
+{% include 'partials/sidebar.html' %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="font-weight-bold h4">Assignment Title: {{ assignment.title }}</p>
+                <div class=" font-weight-bold h5">
+                    {{ assignment.description | safe }}
+                    <p class="font-italic">You have  {{ assignment.max_try }} attempts</p>
+                    <p class="font-weight-bold mt-3">
+                        Deadline:
+                        <span class="badge badge-danger">
+                            {{ assignment.deadline }}
+                        </span>
+                    </p>
+                    <p class="font-italic">Best Regards: {{ assignment.sender }}</p>
+                </div>
+                
+            </div>
+    </div>
+        <!-- Form Section -->
+        <div class="card">
+            <div class="card-body ">
+                <div class="row">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if not student_assignment %}
+                        <div class="mb-3">
+                            {{ form.assignment }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.student }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.attempts }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label text-primary">Upload File<span class="required">*</span></label>
+                            <div style="width: 350px;">
+                                {{ form.file }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h4> Comment form</h4>
+                            {{ form.comment }}
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <hr>
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <li>
+                                            <strong>{{ field.label }}</strong>:
+                                            {% for error in field.errors %}
+                                                {{ error }}
+                                                <br>
+                                            {% endfor %}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% elif student_assignment.attempts > 0  %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" >
+                            <h5 class="text-primary">You have submitted the assigment <a class="text-success" href="{% url 'edit-assignment' student_assignment.id %}">click here</a> to update your assigment - {{student_assignment.attempts}} attempts left </h5>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger" role="alert" style="max-width: 350px;">
+                            You don't have any attempt left :(
+                        </div>
+                        {% endif %}
+                        
+                    
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

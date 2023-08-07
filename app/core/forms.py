@@ -120,17 +120,6 @@ class AddSectionForm(forms.ModelForm):
             self.add_error('max_student_count','Exceeded max student count')
         return max
 
-
-class EditLessonForm(forms.ModelForm):
-    class Meta:
-        model=Lessons
-        fields=('title', 'season','section',)
-        widget={
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'season':forms.Select(attrs={'class': 'form-control'}),
-            'section': forms.Select(attrs={'class': 'form-control'}),
-        }
-
 class EditSectionForm(forms.ModelForm):
     class Meta:
         model=Sections
@@ -141,6 +130,9 @@ class EditSectionForm(forms.ModelForm):
             'students': forms.CheckboxSelectMultiple(attrs={'class':'form-check-input','type':'checkbox', 'id':'studid'}),
             'max_student_count': forms.NumberInput(attrs={'class':'form-control'}),
         }
+
+
+
 
 class CreateAssignmentForm(forms.ModelForm):
     receiver = forms.ModelMultipleChoiceField(
@@ -174,15 +166,20 @@ class CreateAssignmentForm(forms.ModelForm):
 
 
 class StudentAssigmentForm(forms.ModelForm):
-
     class Meta:
         model = StudentsAssignment
         fields = '__all__' 
-       
-
+        widgets={
+            'description':CKEditorWidget(),
+            'file':forms.ClearableFileInput(attrs={'class':'form-control custom-file-input'}),
+        }
     def __init__(self, *args, **kwargs):
         super(StudentAssigmentForm, self).__init__(*args, **kwargs)
         self.fields['assignment'].widget = forms.HiddenInput()
+        self.fields['student'].widget = forms.HiddenInput()
+        # self.fields['attempts'].widget = forms.HiddenInput()
+
+
 
 
 

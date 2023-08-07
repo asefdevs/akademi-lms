@@ -1,0 +1,88 @@
+{% extends 'base_core.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/navheader-preloader.html' %}
+{% include 'partials/header.html' %}
+{% include 'partials/sidebar.html' %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- Form Section -->
+        <div class="card">
+            <div class="card-body ">
+                <div class="row">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ edit_form.assignment }}
+                        </div>
+                        <div class="mb-3">
+                            {{ edit_form.student }}
+                        </div>
+                        <div class="mb-3">
+                            {{ edit_form.attempts }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label text-primary">Upload File<span class="required">*</span></label>
+                            <div style="width: 450px;">
+                                {{edit_form.file }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <h4> Comment form</h4>
+                            {{ edit_form.comment }}
+                        </div>
+                    
+                        {% if edit_form.attempts.value > 0  %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" >
+                            <h5 class="text-primary">You have updated the assigment ,{{edit_form.attempts.value}} attempts left. If your attempts are exhausted, you will be redirected to the home page.  </h5>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-danger" role="alert" style="max-width: 350px;">
+                            You don't have any attempt left :(
+                        </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <hr>
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <li>
+                                            <strong>{{ field.label }}</strong>:
+                                            {% for error in field.errors %}
+                                                {{ error }}
+                                                <br>
+                                            {% endfor %}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% comment %} 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Blog Post</title>
+</head>
+<body>
+    <h1>Edit Blog Post</h1>
+    <form method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{ edit_form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html> {% endcomment %}

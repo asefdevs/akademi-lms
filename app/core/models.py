@@ -62,11 +62,13 @@ class Assignment(models.Model):
 
 class StudentsAssignment(models.Model):
     assignment=models.ForeignKey(Assignment, related_name='assigment',on_delete=models.CASCADE)
-    user=models.ForeignKey('staff.Students',on_delete=models.CASCADE, blank=True,related_name='student_assigment'),
+    student=models.ForeignKey('staff.Students',on_delete=models.CASCADE,blank=True,null=True,related_name='student_assigment')
     comment=RichTextField(blank=True,null=True)
     file=models.FileField( upload_to='students_assigments',null=True, blank=True)
+    attempts=models.IntegerField(blank=True,null=True)
+
     def __str__(self):
-        return self.assignment.title
+        return f'{self.assignment.title} - {self.student}'
 
     class Meta:
         verbose_name_plural = 'Students Assignment'

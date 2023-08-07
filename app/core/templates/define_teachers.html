@@ -1,82 +1,47 @@
-{% extends 'base_core.html' %}
-{% load static %}
-{% block content %}
-{% include 'partials/navheader-preloader.html' %}
-{% include 'partials/header.html' %}
-{% include 'partials/sidebar.html' %}
-
-
-<div class="content-body">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xl-12">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="mb-0">Class Details</h5>
-          </div>
-          <div class="card-body">
-            <form method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-            <div class="row">
-
-              <div class="col-xl-9 col-lg-8">
-                
-                <div class="row">
-                  <div class="col-xl-6 col-sm-6">
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label text-primary" >Classname<span class="required">*</span></label>
-                      {{form.name}}
-                      </div>     
-                      <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label text-primary">Students<span class="required">*</span></label>
-                        {{form.students}}
-                      </div>            
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput3" class="form-label text-primary">Teachers<span class="required">*</span></label>
-                      {{form.teachers}}
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput3" class="form-label text-primary">Lessons<span class="required">*</span></label>
-                        {{form.lessons}}
-                      </div>
-               
-                    
-                  <div>
-                    <hr>
-										{% if form.errors %}
-										<div class="alert alert-danger">
-										  <ul>
-											{% for field in form %}
-											  {% if field.errors %}
-												<li>
-												  <strong>{{ field.label }}</strong>: 
-												  {% for error in field.errors %}
-													{{ error }}
-													<br>
-												  {% endfor %}
-												</li>
-											  {% endif %}
-											{% endfor %}
-										  </ul>
-										</div>
-										{% endif %}
-                </div>
-                  <button type="submit" class="btn btn-block btn-primary">Sign me up</button>
-  
-                  </div>
-                </div>
-              </div>
-            </form>
-            </div>
-          </div>
-        </div>
-      </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Points Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Final Points Table</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Lesson 1</th>
+                    <th>Lesson 2</th>
+                    <th>Lesson 3</th>
+                    <!-- Add more lesson columns as needed -->
+                    <th>Total Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>90</td>
+                    <td>85</td>
+                    <td>92</td>
+                    <!-- Add more lesson points as needed -->
+                    <td>267</td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>95</td>
+                    <td>88</td>
+                    <td>78</td>
+                    <!-- Add more lesson points as needed -->
+                    <td>261</td>
+                </tr>
+                <!-- Add more rows for other students -->
+            </tbody>
+        </table>
     </div>
-  </div>
-</div>
 
-
-
-
-
-{% endblock %}
+    <!-- Bootstrap JS (optional, only required if you need JS functionality) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -2,8 +2,8 @@ from django import forms
 from django.shortcuts import get_object_or_404, render,redirect
 from django.urls import reverse
 from baseuser.models import User
-from baseuser.decorators import custom_login_required,superadmin_required
-from core.forms import AddSectionForm, CreateAssignmentForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm, StudentAssigmentForm
+from baseuser.decorators import custom_login_required, student_required,superadmin_required, teacher_required
+from core.forms import AddSectionForm, CreateAssignmentForm, CreateClassForm,EditClassForm,AddLessonForm,EditSectionForm,StudentAssigmentForm
 from. models import Classes,Notification,Assignment, StudentsAssignment
 from staff.models import Lessons, Sections,Students,Teachers
 from django.forms import formset_factory
@@ -121,7 +121,8 @@ def edit_class(request,class_name):
         'page_title': 'Edit Class'
     }
     return render (request,'edit-class.html',context)
-
+@custom_login_required
+@superadmin_required
 def add_lesson(request):
     FormSet = formset_factory(AddSectionForm, extra=1)  
     if request.method == 'POST':
@@ -158,13 +159,31 @@ def add_lesson(request):
         }
 
     return render(request, 'add_lesson.html', context)
+@custom_login_required
+@superadmin_required
+def edit_lesson(request, lesson_id):
+    lesson=Lessons.objects.get(pk=lesson_id)
+    if request.method == 'POST':
+        edit_form=AddLessonForm(request.POST,request.FILES,instance=lesson)
+        if edit_form.is_valid():
+            edit_form.save()
+    else:
+        edit_form=AddLessonForm(instance=lesson)
+    context={
+        'edit_form':edit_form,
+        'page_title':'Edit Lesson',
 
+    }
+    return render(request,'edit_lesson.html',context)
+@custom_login_required
+@superadmin_required
 def edit_section(request, section_id):
     section_data=Sections.objects.get(pk=section_id)
     form=EditSectionForm(request.POST,instance=section_data)
     context={
         'form': form,
         'classes':Classes.objects.all(),
+        'page_title':'Edit Section',
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -180,24 +199,19 @@ def edit_section(request, section_id):
     return render(request, 'edit-section.html', context)
 
 
-def add_section_view(request):
-    if request.method == 'POST':
-        form = AddSectionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('add_section')  
-    else:
-        form = AddSectionForm()
 
-    return render(request, 'add_section.html', {'form': form})
-
-
+@custom_login_required
+@superadmin_required
+@teacher_required
 def lesson_list(request):
     context={
+        'page_title':'Lesson List',
         'lessons':Lessons.objects.all()
     }
     return render(request,'lesson_list.html',context)
-
+@custom_login_required
+@superadmin_required
+@teacher_required
 def lesson_detail(request,lesson_id):
     lesson=Lessons.objects.get(id=lesson_id)
     section=lesson.section.all()
@@ -238,19 +252,65 @@ def lesson_detail(request,lesson_id):
         'assignments': Assignment.objects.filter(lesson=lesson)
     }
     return render(request,'lesson_detail.html',context)
+@custom_login_required
+@student_required
+def assignment_submit(request, id):
+    try:
+        assignment = Assignment.objects.get(pk=id)
+        user=request.user
+        student=Students.objects.get(user=user)
+        verification_receiver=Sections.objects.filter(students=student,assignment_receivers=assignment).first()
+        assignment=Assignment.objects.get(receiver=verification_receiver)
+        student_assignment=StudentsAssignment.objects.filter(assignment=assignment,student=student).last()
+        if request.method == 'POST':
+            form=StudentAssigmentForm(request.POST,request.FILES)
+            if form.is_valid() :
+                form.save()
+                return redirect(reverse('assignment-detail',args=[id]))
+        else:
+            form=StudentAssigmentForm(initial={'assignment':assignment,'student':student,'attempts':assignment.max_try})
+        context={
+            'assignment': assignment,
+            'form': form,
+            'student_assignment': student_assignment,
+            'page_title':'Assigment Submittion',
 
-def assignment_detail(request, id):
-    assignment = Assignment.objects.get(pk=id)
-    if request.method == 'POST':
-        form=StudentAssigmentForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-    else:
-        form=StudentAssigmentForm(initial={'assignment':assignment})
+            }
+
+        return render(request, 'assignment_submit.html',context)
+    except Assignment.DoesNotExist:
+        return redirect('error_permission')
+    except Students.DoesNotExist:
+        return redirect('error_permission')
+
+
+@custom_login_required
+@student_required
+def edit_assignment(request,id):
+    try :
+        assignment = StudentsAssignment.objects.get(pk=id)
+        print(assignment.attempts)
+        user=request.user
+        student=Students.objects.get(user=user,student_assigment=assignment)
+        if assignment.attempts > 0:
+                if request.method == 'POST':
+                    edit_form=StudentAssigmentForm(request.POST,request.FILES,instance=assignment)
+                    if edit_form.is_valid():
+                        instance=edit_form.save()
+                        instance.attempts -= 1
+                        instance.save()
+                        return redirect(reverse('edit-assignment',args=[id]))
+                else:
+                    edit_form=StudentAssigmentForm(instance=assignment)
+                context={
+                    'edit_form': edit_form,
+                    'page_title': 'Update Assignment',
+                    }
+                return render(request, 'edit_student_assignment.html',context)
+        else:
+            return redirect('home')
+    except Students.DoesNotExist:
+        return redirect('error_permission')
     
-    context={
-        'assignment': assignment,
-        'form': form
-        }
+        
 
-    return render(request, 'assignment_detail.html',context)
